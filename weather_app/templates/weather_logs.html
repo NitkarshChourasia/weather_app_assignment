@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Logs</title>
+</head>
+<body>
+    <h1>Weather Logs</h1>
+    <table>
+        <tr>
+            <th>City</th>
+            <th>Temperature</th>
+            <th>Timestamp</th>
+            <th>Actions</th>
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.city }}</td>
+            <td>{{ log.temperature }} °C</td>
+            <td>{{ log.timestamp }}</td>
+            <td>
+                <form method="POST" action="/delete_log/{{ log.id }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

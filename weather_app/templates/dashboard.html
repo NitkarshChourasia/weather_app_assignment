@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Dashboard</h1>
+        
+        <!-- City input and search button -->
+        <div class="search-bar">
+            <input type="text" id="city" placeholder="Enter city name">
+            <button onclick="fetchWeather()">Get Weather</button>
+        </div>
+        
+        <!-- Weather display section -->
+        <div id="weather-info">
+            <!-- Weather details will be dynamically added here -->
+        </div>
+
+        <!-- Log Weather button -->
+        <div id="log-weather">
+            <button onclick="logWeather()">Log Weather</button>
+        </div>
+        
+        <!-- Table for logged weather data -->
+        <div id="weather-logs">
+            <h2>Logged Weather Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th>Temperature</th>
+                        <th>Pressure</th>
+                        <th>Humidity</th>
+                        <th>Wind Speed</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="log-table">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+    <script>
+        // Fetch weather data
+        function fetchWeather() {
+            const city = document.getElementById('city').value;
+            fetch(`/weather/${city}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        displayWeather(data);
+                    }
+                });
+        }
+
+        // Display weather data
+        function displayWeather(data) {
+            const weatherDiv = document.getElementById('weather-info');
+            weatherDiv.innerHTML = `
+                <p><strong>City:</strong> ${data.city}</p>
+                <p><strong>Temperature:</strong> ${data.temperature} °C</p>
+                <p><strong>Pressure:</strong> ${data.pressure} hPa</p>
+                <p><strong>Humidity:</strong> ${data.humidity}%</p>
+                <p><strong>Wind Speed:</strong> ${data.wind_speed} m/s</p>
+            `;
+        }
+
+        // Log weather data
+        function logWeather() {
+            const weatherDiv = document.getElementById('weather-info');
+            const weatherData = {
+                city: weatherDiv.querySelector('p:nth-child(1)').innerText.split(': ')[1],
+                temperature: weatherDiv.querySelector('p:nth-child(2)').innerText.split(': ')[1],
+                pressure: weatherDiv.querySelector('p:nth-child(3)').innerText.split(': ')[1],
+                humidity: weatherDiv.querySelector('p:nth-child(4)').innerText.split(': ')[1],
+                wind_speed: weatherDiv.querySelector('p:nth-child(5)').innerText.split(': ')[1]
+            };
+
+            fetch('/log_weather', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(weatherData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateLogTable(weatherData);
+                } else {
+                    alert("Error logging weather data.");
+                }
+            });
+        }
+
+        // Update logged weather data table
+        function updateLogTable(weatherData) {
+            const tableBody = document.getElementById('log-table');
+            const newRow = `
+                <tr>
+                    <td>${weatherData.city}</td>
+                    <td>${weatherData.temperature} °C</td>
+                    <td>${weatherData.pressure} hPa</td>
+                    <td>${weatherData.humidity}%</td>
+                    <td>${weatherData.wind_speed} m/s</td>
+                    <td><button onclick="deleteLog(this)">Delete</button></td>
+                </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', newRow);
+        }
+
+        // Delete a logged weather entry
+        function deleteLog(button) {
+            const row = button.parentElement.parentElement;
+            row.remove();
+        }
+    </script>
+</body>
+</html>

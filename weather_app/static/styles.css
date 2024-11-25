@@ -1,0 +1,10 @@
+/* Simple styling for the login and dashboard */
+body {
+    font-family: Arial, sans-serif;
+}
+form {
+    margin-bottom: 20px;
+}
+button {
+    padding: 5px 10px;
+}
