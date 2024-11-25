@@ -126,6 +126,67 @@ h1 {
     display: none;
 }
 
+/* Container for the log-weather section */
+.log-weather {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Space between input and button */
+    margin-top: 20px;
+}
+
+/* Style for the input field */
+#place-input {
+    width: 300px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#place-input:focus {
+    border-color: #007bff; /* Change border color on focus */
+}
+
+/* Style for the button */
+#log-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #007bff; /* Primary button color */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#log-btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+#log-btn:active {
+    transform: scale(0.95); /* Slight shrink effect on click */
+}
+
+/* Style for the button's image */
+#log-btn img {
+    height: 20px;
+    width: 20px;
+    margin-left: 5px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    #place-input {
+        width: 80%; /* Adjust input width for smaller screens */
+    }
+}
+
+
 /* For Mobile Phones */
 @media (max-width: 418px) {
     body {
