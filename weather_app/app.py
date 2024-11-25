@@ -6,21 +6,36 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 from dotenv import load_dotenv
-
 # Load environment variables
+from flask import Flask
+from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env
 load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "your_secret_key")
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "your_default_secret_key")
 bcrypt = Bcrypt(app)
 
-# Database Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///weather_logs.db'
+# PostgreSQL Database Configuration
+db_user = os.getenv("POSTGRES_USER", "your_postgres_user")
+db_password = os.getenv("POSTGRES_PASSWORD", "your_postgres_password")
+db_host = os.getenv("POSTGRES_HOST", "localhost")
+db_port = os.getenv("POSTGRES_PORT", "5432")
+db_name = os.getenv("POSTGRES_DB", "your_database_name")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
+
 
 # WeatherLog Model
 class WeatherLog(db.Model):
@@ -95,6 +110,16 @@ def delete_log(log_id):
             return {"message": "Deleted successfully"}
         else:
             return {"error": "Log not found"}, 404
+    return {"error": "Unauthorized"}, 401
+
+@app.route('/log_weather', methods=['POST'])
+def log_weather():
+    if 'username' in session:
+        data = request.json
+        log = WeatherLog(username=session['username'], **data)
+        db.session.add(log)
+        db.session.commit()
+        return {"message": "Weather data logged successfully"}
     return {"error": "Unauthorized"}, 401
 
 if __name__ == '__main__':

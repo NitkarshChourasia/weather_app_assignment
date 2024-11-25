@@ -59,6 +59,15 @@
         </div>
     </div>
 
+
+    <div class="log-weather">
+        <input type="text" id="place-input" placeholder="Enter name of the Place to log" spellcheck="false">
+        <button id="log-btn">
+            <img src="{{ url_for('static', filename='images/log_icon.png') }}" alt="Log">
+        </button>
+    </div>
+
+
     <script>
         const apiKey = "0af0daea686c491dec25d6bd25b63d4d";
         const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
@@ -116,6 +125,42 @@
             checkWeather(searchBox.value);
         });
     </script>
+    <script>
+        document.getElementById('log-btn').addEventListener('click', function () {
+            const place = document.getElementById('place-input').value;
+
+            if (place.trim() === "") {
+                alert("Please enter a place name.");
+                return;
+            }
+
+            // Replace with the actual weather data (for demo purposes)
+            const weatherData = {
+                city: place,
+                temperature: 25.0, // Example data
+                timestamp: new Date().toISOString(),
+            };
+
+            // Send the weather data to the backend
+            fetch('/log_weather', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(weatherData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message); // Display success message
+                    } else {
+                        alert("Error logging weather data.");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
 </body>
 
 </html>
