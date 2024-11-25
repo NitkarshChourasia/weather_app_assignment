@@ -1,8 +1,0 @@
-{
-  "users": [
-    {
-      "username": "test_user",
-      "password": "$2b$12$Jt5yGFqtmL7g5c6.Jm8.BuwQb.E7dbVkh2lY8cI80Q0IbXyTxTwjC"  # bcrypt hashed password
-    }
-  ]
-}
