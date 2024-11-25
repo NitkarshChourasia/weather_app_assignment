@@ -122,5 +122,22 @@ def log_weather():
         return {"message": "Weather data logged successfully"}
     return {"error": "Unauthorized"}, 401
 
+
+@app.route('/delete_log/<int:log_id>', methods=['DELETE'])
+def delete_log(log_id):
+    if 'username' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    log = WeatherLog.query.get_or_404(log_id)
+
+    # Ensure the user is deleting their own log
+    if log.username != session['username']:
+        return jsonify({'error': 'Forbidden'}), 403
+
+    db.session.delete(log)
+    db.session.commit()
+
+    return jsonify({'message': 'Log deleted successfully'}), 200
+
 if __name__ == '__main__':
     app.run(debug=True)
