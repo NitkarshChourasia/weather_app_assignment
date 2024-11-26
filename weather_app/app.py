@@ -61,11 +61,21 @@ def login_required(func):
         return func(*args, **kwargs)
     return wrapper
 
+# Function to read users from the JSON file
+def read_users_from_json():
+    with open('data/users.json') as f:
+        return json.load(f)['users']
+
+# Function to write users to the JSON file
+def write_users_to_json(users):
+    with open('data/users.json', 'w') as f:
+        json.dump({"users": users}, f, indent=4)
+
+# Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        with open('data/users.json') as f:
-            users = json.load(f)['users']
+        users = read_users_from_json()
         username = request.form['username']
         password = request.form['password']
         for user in users:
@@ -75,15 +85,41 @@ def login():
         return "Invalid credentials"
     return render_template('login.html')
 
+# Registration route
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+        users = read_users_from_json()
+
+        # Check if the username already exists
+        if any(user['username'] == username for user in users):
+            return "Username already exists", 400
+
+        # Add new user to the users list
+        users.append({'username': username, 'password': hashed_password})
+
+        # Save updated users list to JSON file
+        write_users_to_json(users)
+
+        return redirect('/login')
+    return render_template('register.html')
+
+# Home route
 @app.route('/')
 def home():
     return render_template('home.html')
 
+# Dashboard route
 @app.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html')
 
+# Fetch weather data route
 @app.route('/weather/<city>')
 def get_weather(city):
     data = fetch_weather_data(city)
@@ -91,6 +127,7 @@ def get_weather(city):
         return jsonify(data)
     return jsonify({"error": "Unable to fetch weather data"}), 500
 
+# Log weather data route
 @app.route('/log_weather', methods=['POST'])
 @login_required
 def log_weather():
@@ -107,12 +144,14 @@ def log_weather():
     db.session.commit()
     return jsonify({"message": "Weather data logged successfully"}), 201
 
+# View weather logs route
 @app.route('/weather_logs')
 @login_required
 def weather_logs():
     logs = WeatherLog.query.filter_by(username=session['username']).all()
     return render_template('weather_logs.html', logs=logs)
 
+# Delete weather log route
 @app.route('/delete_log/<int:log_id>', methods=['DELETE'])
 @login_required
 def delete_log(log_id):
