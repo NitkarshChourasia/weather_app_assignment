@@ -6,12 +6,6 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 from dotenv import load_dotenv
-# Load environment variables
-from flask import Flask
-from flask_bcrypt import Bcrypt
-from flask_sqlalchemy import SQLAlchemy
-from dotenv import load_dotenv
-import os
 
 # Load environment variables from .env
 load_dotenv()
@@ -45,9 +39,27 @@ class WeatherLog(db.Model):
     temperature = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+
 # Initialize the database
 with app.app_context():
     db.create_all()
+
+# Utility function to fetch weather data from OpenWeather API
+def fetch_weather_data(city):
+    api_key = os.getenv("OPENWEATHER_API_KEY")
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&APPID={api_key}&units=metric"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    return None
+
+# Decorator for authentication check
+def login_required(func):
+    def wrapper(*args, **kwargs):
+        if 'username' not in session:
+            return redirect('/login')
+        return func(*args, **kwargs)
+    return wrapper
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -68,75 +80,48 @@ def home():
     return render_template('home.html')
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
-    if 'username' in session:
-        return render_template('dashboard.html')
-    return redirect('/login')
+    return render_template('dashboard.html')
 
 @app.route('/weather/<city>')
 def get_weather(city):
-    api_key = os.getenv("OPENWEATHER_API_KEY")
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&APPID={api_key}&units=metric"
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return {"error": "Unable to fetch weather data"}
+    data = fetch_weather_data(city)
+    if data:
+        return jsonify(data)
+    return jsonify({"error": "Unable to fetch weather data"}), 500
 
 @app.route('/log_weather', methods=['POST'])
+@login_required
 def log_weather():
-    if 'username' in session:
-        data = request.json
-        log = WeatherLog(username=session['username'], **data)
-        db.session.add(log)
-        db.session.commit()
-        return {"message": "Logged successfully"}
-    return {"error": "Unauthorized"}
+    data = request.json
+    if not data.get('city') or not data.get('temperature'):
+        return jsonify({"error": "Missing city or temperature data"}), 400
+    
+    log = WeatherLog(
+        username=session['username'],
+        city=data['city'],
+        temperature=data['temperature']
+    )
+    db.session.add(log)
+    db.session.commit()
+    return jsonify({"message": "Weather data logged successfully"}), 201
 
 @app.route('/weather_logs')
+@login_required
 def weather_logs():
-    if 'username' in session:
-        logs = WeatherLog.query.filter_by(username=session['username']).all()
-        return render_template('weather_logs.html', logs=logs)
-    return redirect('/login')
-
-@app.route('/delete_log/<int:log_id>', methods=['POST'])
-def delete_log(log_id):
-    if 'username' in session:
-        log = WeatherLog.query.get(log_id)
-        if log:
-            db.session.delete(log)
-            db.session.commit()
-            return {"message": "Deleted successfully"}
-        else:
-            return {"error": "Log not found"}, 404
-    return {"error": "Unauthorized"}, 401
-
-@app.route('/log_weather', methods=['POST'])
-def log_weather():
-    if 'username' in session:
-        data = request.json
-        log = WeatherLog(username=session['username'], **data)
-        db.session.add(log)
-        db.session.commit()
-        return {"message": "Weather data logged successfully"}
-    return {"error": "Unauthorized"}, 401
-
+    logs = WeatherLog.query.filter_by(username=session['username']).all()
+    return render_template('weather_logs.html', logs=logs)
 
 @app.route('/delete_log/<int:log_id>', methods=['DELETE'])
+@login_required
 def delete_log(log_id):
-    if 'username' not in session:
-        return jsonify({'error': 'Unauthorized'}), 401
-
     log = WeatherLog.query.get_or_404(log_id)
-
-    # Ensure the user is deleting their own log
     if log.username != session['username']:
         return jsonify({'error': 'Forbidden'}), 403
-
+    
     db.session.delete(log)
     db.session.commit()
-
     return jsonify({'message': 'Log deleted successfully'}), 200
 
 if __name__ == '__main__':
