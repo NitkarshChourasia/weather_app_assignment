@@ -4,11 +4,15 @@ from datetime import datetime
 import os
 import requests
 from flask import Flask, render_template, request, redirect, session, jsonify
+from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from flask_bcrypt import Bcrypt
 from sqlalchemy import func
 import random
+from flask_wtf.csrf import CSRFProtect
+
+csrf = CSRFProtect(app)
 
 # Load environment variables from .env
 load_dotenv()
@@ -35,6 +39,11 @@ db = SQLAlchemy(app)
 
 
 # WeatherLog Model
+# Have to update this also
+# Have to update this also 
+# Have to update this also
+# Have to update this also
+# Have to update this also
 class WeatherLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
@@ -48,10 +57,25 @@ with app.app_context():
     db.create_all()
 
 
+@app.route("/")
+def dashboard_icons():
+    weather_icons = {
+        "Clouds": url_for("static", filename="images/clouds.png"),
+        "Clear": url_for("static", filename="images/clear.png"),
+        "Rain": url_for("static", filename="images/rain.png"),
+        "Drizzle": url_for("static", filename="images/drizzle.png"),
+        "Mist": url_for("static", filename="images/mist.png"),
+        "Snow": url_for("static", filename="images/snow.png"),
+        "Thunderstorm": url_for("static", filename="images/thunder.png"),
+        "default": url_for("static", filename="images/search.png"),
+    }
+    return render_template("dashboard.html", weather_icons=weather_icons)
+
+
 # Utility function to fetch weather data from OpenWeather API
 @app.route("/weather", methods=["GET"])
 def fetch_weather_data():
-    city = request.args.get('city')
+    city = request.args.get("city")
     print(city)
     if not city:
         return jsonify({"error": "City parameter is required"}), 400
@@ -61,18 +85,17 @@ def fetch_weather_data():
     api_key = random.choice([api_key1, api_key2])
     print(api_key)
 
-
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&APPID={api_key}&units=metric"
     response = requests.get(url)
     if response.status_code == 200:
         print(jsonify(response.json()))
-        return jsonify(response.json()) # Return the weather data as JSON
+        return jsonify(response.json())  # Return the weather data as JSON
     else:
         return jsonify({"error": "City not found"}), response.status_code
 
+
 # Define logs globally
-logs = [
-]
+logs = []
 
 
 # Decorator for authentication check
@@ -110,6 +133,8 @@ def login():
                 user["password"], password
             ):
                 session["username"] = username
+                session_interface = SecureCookieSessionInterface()
+                session_interface.save_session(app, session, None)
                 return redirect("/dashboard")
 
         return "Invalid credentials", 401
@@ -259,14 +284,13 @@ def logout():
     return redirect("/login")  # Redirect to the login page
 
 
-
-@app.route('/clear-logs', methods=[''])
+@app.route("/clear-logs", methods=[""])
 def clear_logs():
-    if 'user_id' not in session:
+    if "user_id" not in session:
         return jsonify({"success": False, "error": "User not authenticated"}), 401
-    
-    user_id = session['user_id']
-    
+
+    user_id = session["user_id"]
+
     try:
         # Delete logs for the logged-in user only
         WeatherLog.query.filter_by(user_id=user_id).delete()
