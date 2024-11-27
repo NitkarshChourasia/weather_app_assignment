@@ -1,0 +1,176 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9f9f9;
+  color: #333;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Night Mode */
+body.night-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Form Container */
+.form-container {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  transition: background-color 0.3s ease;
+}
+
+body.night-mode .form-container {
+  background: #1f1f1f;
+}
+
+/* Form Content */
+.form-content {
+  text-align: center;
+}
+
+.form-content h1 {
+  font-size: 24px;
+  color: #4e73df;
+  margin-bottom: 10px;
+}
+
+body.night-mode .form-content h1 {
+  color: #78a1ff;
+}
+
+.form-description {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+body.night-mode .form-description {
+  color: #ccc;
+}
+
+/* Input Group */
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.input-group label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #555;
+  display: block;
+}
+
+body.night-mode .input-group label {
+  color: #bbb;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #4e73df;
+}
+
+body.night-mode .input-group input {
+  background: #333;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+/* Buttons */
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: #4e73df;
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #3a5bb1;
+}
+
+body.night-mode .btn {
+  background: #506dfd;
+}
+
+body.night-mode .btn:hover {
+  background: #3e59c9;
+}
+
+/* Footer Links */
+.form-footer {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.form-footer a {
+  color: #4e73df;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+
+body.night-mode .form-footer {
+  color: #aaa;
+}
+
+body.night-mode .form-footer a {
+  color: #78a1ff;
+}
+
+/* Night Mode Toggle */
+.night-mode-toggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.night-mode-toggle:hover {
+  color: #4e73df;
+}
+
+body.night-mode .night-mode-toggle {
+  color: #fff;
+}
+
+body.night-mode .night-mode-toggle:hover {
+  color: #78a1ff;
+}
