@@ -6,31 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login_register.css') }}">
+    <script>
+        // Toggle night mode
+        function toggleNightMode() {
+            document.body.classList.toggle('night-mode');
+            localStorage.setItem('nightMode', document.body.classList.contains('night-mode'));
+        }
 
+        // Retain night mode state
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('nightMode') === 'true') {
+                document.body.classList.add('night-mode');
+            }
+        });
+    </script>
 </head>
 
 <body>
-    <div class="login-container">
-        <div class="login-form">
-            <h1>Welcome Back!</h1>
-            <form action="/login" method="POST">
-                <!-- CSRF token input field -->
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <!-- Night mode toggle button -->
+    <button onclick="toggleNightMode()" class="night-mode-toggle">🌙</button>
 
+    <div class="form-container">
+        <div class="form-content">
+            <h1>Welcome Back!</h1>
+            <p class="form-description">Log in to access your account.</p>
+            <form action="/login" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="input-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" required placeholder="Enter your username">
                 </div>
-
                 <div class="input-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required placeholder="Enter your password">
                 </div>
-
                 <button type="submit" class="btn">Login</button>
-
-                <div class="signup">
+                <div class="form-footer">
                     <p>Don't have an account? <a href="/register">Sign Up</a></p>
                 </div>
             </form>
