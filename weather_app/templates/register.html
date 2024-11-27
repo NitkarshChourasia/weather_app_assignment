@@ -1,15 +1,54 @@
-<form method="POST" action="/register">
-    <!-- CSRF token input field -->
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<!DOCTYPE html>
+<html lang="en">
 
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login_register.css') }}">
+    <script>
+        function toggleNightMode() {
+            document.body.classList.toggle('night-mode');
+            localStorage.setItem('nightMode', document.body.classList.contains('night-mode'));
+        }
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('nightMode') === 'true') {
+                document.body.classList.add('night-mode');
+            }
+        });
+    </script>
+</head>
 
-    <label for="confirm_password">Confirm Password:</label>
-    <input type="password" id="confirm_password" name="confirm_password" required><br>
+<body>
+    <button onclick="toggleNightMode()" class="night-mode-toggle">🌙</button>
 
-    <button type="submit">Register</button>
-</form>
+    <div class="form-container">
+        <div class="form-content">
+            <h1>Create Account</h1>
+            <p class="form-description">Sign up to get started!</p>
+            <form action="/register" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Choose a username">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Choose a secure password">
+                </div>
+                <div class="input-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password">
+                </div>
+                <button type="submit" class="btn">Sign Up</button>
+                <div class="form-footer">
+                    <p>Already have an account? <a href="/login">Log In</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
