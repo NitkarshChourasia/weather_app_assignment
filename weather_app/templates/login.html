@@ -1,26 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <h1>Login</h1>
-    <form action="/login" method="POST">
-        <!-- CSRF token input field -->
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="login-container">
+        <div class="login-form">
+            <h1>Welcome Back!</h1>
+            <form action="/login" method="POST">
+                <!-- CSRF token input field -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Enter your username">
+                </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
 
-        <button type="submit">Login</button>
-    </form>
+                <button type="submit" class="btn">Login</button>
+
+                <div class="signup">
+                    <p>Don't have an account? <a href="/register">Sign Up</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
-
 </html>
