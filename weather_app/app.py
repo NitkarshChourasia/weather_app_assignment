@@ -2,6 +2,7 @@ import json
 import re  # to use regex for password validation
 from datetime import datetime
 import os
+import logging
 import requests
 from flask import Flask, render_template, request, redirect, session, jsonify
 from flask import Flask, render_template, url_for
@@ -11,16 +12,60 @@ from flask_bcrypt import Bcrypt
 from sqlalchemy import func
 import random
 from flask_wtf.csrf import CSRFProtect
-
-csrf = CSRFProtect(app)
+from secret_key_generator import generate_secret_key
+from logging.handlers import RotatingFileHandler
 
 # Load environment variables from .env
 load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY")
-bcrypt = Bcrypt(app)
+# Set up the logger for both CMD and file output
+import logging
+from logging.handlers import RotatingFileHandler
+from flask import Flask
+
+# Initialize the Flask app
+app = Flask(__name__)
+
+
+def setup_logging():
+    # Create a logger
+    logger = logging.getLogger("FlaskAppLogger")
+    logger.setLevel(logging.DEBUG)  # Log all levels (DEBUG and above)
+
+    # Define the log format
+    log_formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+
+    # File Handler (for saving logs to a file)
+    file_handler = RotatingFileHandler("app.log", maxBytes=100000, backupCount=10)
+    file_handler.setLevel(logging.INFO)  # Log at INFO level or higher in the file
+    file_handler.setFormatter(log_formatter)
+
+    # Console Handler (for printing to CMD)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(
+        logging.INFO
+    )  # You can change this to DEBUG or ERROR based on needs
+    console_handler.setFormatter(log_formatter)
+
+    # Add the handlers to the logger
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    # Add the logger to the Flask app's logger
+    app.logger.addHandler(file_handler)
+    app.logger.addHandler(console_handler)
+
+    return logger
+
+
+# Initialize the logger
+logger = setup_logging()
+print("logger initialised")
+app.logger = logger
 
 # PostgreSQL Database Configuration
 db_user = os.getenv("POSTGRES_USER")
@@ -34,13 +79,22 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+csrf = CSRFProtect(app)
+app.secret_key = generate_secret_key() or os.getenv(
+    "FLASK_SECRET_KEY", "default_fallback_key"
+)
+if app.secret_key == "default_fallback_key":
+    print(
+        "WARNING: Using default secret key. Please set the FLASK_SECRET_KEY environment variable."
+    )
+bcrypt = Bcrypt(app)
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
 
 
 # WeatherLog Model
 # Have to update this also
-# Have to update this also 
+# Have to update this also
 # Have to update this also
 # Have to update this also
 # Have to update this also
@@ -76,8 +130,10 @@ def dashboard_icons():
 @app.route("/weather", methods=["GET"])
 def fetch_weather_data():
     city = request.args.get("city")
+    app.logger.info(f"Fetching weather data for city: {city}")
     print(city)
     if not city:
+        app.logger.warning("City parameter is missing in weather fetch request")
         return jsonify({"error": "City parameter is required"}), 400
 
     api_key1 = os.getenv("OPENWEATHER_API_KEY")
@@ -88,9 +144,10 @@ def fetch_weather_data():
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&APPID={api_key}&units=metric"
     response = requests.get(url)
     if response.status_code == 200:
-        print(jsonify(response.json()))
+        app.logger.info(f"Successfully fetched weather data for city: {city}")
         return jsonify(response.json())  # Return the weather data as JSON
     else:
+        app.logger.error(f"Failed to fetch weather data for city: {city} (Status code: {response.status_code})")
         return jsonify({"error": "City not found"}), response.status_code
 
 
@@ -128,6 +185,10 @@ def login():
         users = read_users_from_json()
         username = request.form["username"]
         password = request.form["password"]
+
+        # Log login attempt
+        app.logger.info(f"Login attempt for user: {username}")
+
         for user in users:
             if user["username"] == username and bcrypt.check_password_hash(
                 user["password"], password
@@ -137,6 +198,8 @@ def login():
                 session_interface.save_session(app, session, None)
                 return redirect("/dashboard")
 
+        # Log failed login attempt
+        app.logger.warning(f"Failed login attempt for user: {username}")
         return "Invalid credentials", 401
     return render_template("login.html")
 
@@ -176,12 +239,17 @@ def register():
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
 
+        # Log the registration attempt
+        app.logger.info(f"Registration attempt for user: {username}")
+
         # Check if passwords match
         if password != confirm_password:
+            app.logger.warning(f"Passwords do not match for user: {username}")
             return "Passwords do not match. Please try again.", 400
 
         # Check if password is strong
         if not is_password_strong(password):
+            app.logger.warning(f"Weak password attempt during registration for user: {username}")
             return (
                 "Password must be at least 8 characters long, contain uppercase, lowercase, a digit, and a special character.",
                 400,
@@ -195,6 +263,7 @@ def register():
 
         # Check if the username already exists
         if any(user["username"] == username for user in users):
+            app.logger.warning(f"Username already exists: {username}")
             return "Username already exists", 400
 
         # Add new user to the users list
@@ -202,7 +271,7 @@ def register():
 
         # Save updated users list to JSON file
         write_users_to_json(users)
-
+        app.logger.info(f"User registered successfully: {username}")
         return redirect("/login")
 
     return render_template("register.html")
@@ -238,6 +307,7 @@ def get_weather(city):
 def log_weather_data():
     data = request.json
     if not data.get("city") or not data.get("temperature"):
+        app.logger.warning(f"Missing city or temperature data in log request by user: {session['username']}")
         return jsonify({"error": "Missing city or temperature data"}), 400
 
     log = WeatherLog(
@@ -245,6 +315,7 @@ def log_weather_data():
     )
     db.session.add(log)
     db.session.commit()
+    app.logger.info(f"User {session['username']} logged weather data for city: {data['city']} with temperature: {data['temperature']}")
     return jsonify({"message": "Weather data logged successfully"}), 201
 
 
@@ -269,10 +340,12 @@ def delete_log(log_id):
     # If using the database:
     log = WeatherLog.query.get_or_404(log_id)
     if log.username != session["username"]:
+        app.logger.warning(f"Unauthorized deletion attempt for log id: {log_id} by user: {session['username']}")
         return jsonify({"error": "Forbidden"}), 403
 
     db.session.delete(log)
     db.session.commit()
+    app.logger.info(f"User {session['username']} deleted weather log with id: {log_id}")
     return jsonify({"message": "Log deleted successfully"}), 200
 
 
@@ -280,6 +353,7 @@ def delete_log(log_id):
 @app.route("/logout")
 @login_required_check
 def logout():
+    app.logger.info(f"User {session['username']} logged out.")
     session.clear()  # Clear the session data
     return redirect("/login")  # Redirect to the login page
 
@@ -299,6 +373,16 @@ def clear_logs():
     except Exception as e:
         db.session.rollback()
         return jsonify({"success": False, "error": str(e)}), 500
+
+@app.errorhandler(500)
+def internal_error(error):
+    app.logger.error(f"Server Error: {error}")
+    return jsonify({"error": "Internal server error"}), 500
+
+@app.errorhandler(404)
+def not_found_error(error):
+    app.logger.warning(f"404 Error: {error}")
+    return jsonify({"error": "Not found"}), 404
 
 
 if __name__ == "__main__":
