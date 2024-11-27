@@ -3,6 +3,7 @@ import re  # to use regex for password validation
 from datetime import datetime
 import os
 import logging
+from datetime import timedelta
 import requests
 from flask import Flask, render_template, request, redirect, session, jsonify
 from flask import Flask, render_template, url_for
@@ -14,6 +15,7 @@ import random
 from flask_wtf.csrf import CSRFProtect
 from secret_key_generator import generate_secret_key
 from logging.handlers import RotatingFileHandler
+from flask.sessions import SecureCookieSessionInterface
 
 # Load environment variables from .env
 load_dotenv()
@@ -77,6 +79,7 @@ db_name = os.getenv("POSTGRES_DB")
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 )
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 csrf = CSRFProtect(app)
@@ -93,17 +96,22 @@ db = SQLAlchemy(app)
 
 
 # WeatherLog Model
-# Have to update this also
-# Have to update this also
-# Have to update this also
-# Have to update this also
-# Have to update this also
+#! Have to update this also
+#! Have to update this also
+#! Have to update this also
+#! Have to update this also
+#! Have to update this also
 class WeatherLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     city = db.Column(db.String(120), nullable=False)
     temperature = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=func.current_timestamp())
+#! Have to update this also
+#! Have to update this also
+#! Have to update this also
+#! Have to update this also
+#! Have to update this also
 
 
 # Initialize the database
@@ -190,23 +198,19 @@ def login():
         app.logger.info(f"Login attempt for user: {username}")
 
         for user in users:
-            if user["username"] == username and bcrypt.check_password_hash(
-                user["password"], password
-            ):
+            if user["username"] == username and bcrypt.check_password_hash(user["password"], password):
                 session["username"] = username
-                session_interface = SecureCookieSessionInterface()
-                session_interface.save_session(app, session, None)
-                return redirect("/dashboard")
+                return redirect("/dashboard")  # Redirect after successful login
 
         # Log failed login attempt
         app.logger.warning(f"Failed login attempt for user: {username}")
-        return "Invalid credentials", 401
-    return render_template("login.html")
+        return "Invalid credentials", 401  # Return an error message if login fails
 
+    return render_template("login.html")  # Render the login form on GET request
 
 # For registration purposes
 
-
+# !to build a strong password check isn't there a library?
 def is_password_strong(password):
     """
     Validates whether a password is strong.
