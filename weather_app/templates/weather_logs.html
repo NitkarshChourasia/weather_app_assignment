@@ -5,172 +5,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Logs</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        button {
-            padding: 8px 16px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        #clear-logs-button {
-            margin: 20px auto;
-            display: block;
-            font-size: 16px;
-            background-color: #FF5733;
-        }
-
-        #clear-logs-button:disabled {
-            background-color: #ddd;
-            cursor: not-allowed;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            font-size: 18px;
-            color: #555;
-        }
-
-        .error-message {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        /* Modal Styling */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            padding: 20px;
-            margin: 15% auto;
-            width: 30%;
-            text-align: center;
-            border-radius: 8px;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-button {
-            padding: 10px 20px;
-            background-color: #FF5733;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .modal-button:hover {
-            background-color: #d04e1a;
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="weather_logs.css">
 </head>
 
 <body>
-    <h1>Weather Logs - {{ username }}</h1>
+    <div class="container">
+        <header>
+            <h1>Weather Logs - {{ username }}</h1>
+            <button id="night-mode-toggle" onclick="toggleNightMode()">🌙 Night Mode</button>
+        </header>
 
-    <!-- Clear All Logs Button -->
-    <button id="clear-logs-button">Clear All Logs</button>
+        <!-- Weather Logs Table -->
+        <div class="table-container">
+            <button id="clear-logs-button" class="btn-danger">Clear All Logs</button>
+            <div id="loading" class="loading">Loading...</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th>Temperature</th>
+                        <th>Timestamp</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr id="log-{{ log.id }}">
+                        <td>{{ log.city }}</td>
+                        <td>{{ log.temperature }} °C</td>
+                        <td>{{ log.timestamp }}</td>
+                        <td>
+                            <button onclick="deleteLog({{ log.id }})" class="btn-delete">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-    <!-- Loading Spinner -->
-    <div id="loading" class="loading" style="display: none;">Loading...</div>
-
-    <!-- Weather Logs Table -->
-    <table>
-        <tr>
-            <th>City</th>
-            <th>Temperature</th>
-            <th>Timestamp</th>
-            <th>Actions</th>
-        </tr>
-        {% for log in logs %}
-        <tr id="log-{{ log.id }}">
-            <td>{{ log.city }}</td>
-            <td>{{ log.temperature }} °C</td>
-            <td>{{ log.timestamp }}</td>
-            <td>
-                <button onclick="deleteLog({{ log.id }})">Delete</button>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <!-- Confirmation Modal -->
-    <div id="confirmation-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <p>Are you sure you want to clear all logs?</p>
-            <button class="modal-button" id="confirm-clear-button">Yes, Clear All</button>
-            <button class="modal-button" onclick="closeModal()">Cancel</button>
+        <!-- Confirmation Modal -->
+        <div id="confirmation-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <p>Are you sure you want to clear all logs?</p>
+                <button class="btn-confirm" id="confirm-clear-button">Yes, Clear All</button>
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+            </div>
         </div>
     </div>
 
     <script>
+        function toggleNightMode() {
+            document.body.classList.toggle("night-mode");
+        }
+
         function deleteLog(logId) {
             fetch(`/delete_log/${logId}`, {
                 method: 'POST',
@@ -182,7 +70,7 @@
             .then(data => {
                 if (data.message === "Log deleted successfully") {
                     alert(data.message);
-                    document.getElementById(`log-${logId}`).remove();  // Remove row from the table
+                    document.getElementById(`log-${logId}`).remove();
                 } else {
                     alert('Failed to delete log: ' + data.message);
                 }
@@ -193,7 +81,6 @@
             });
         }
 
-        // Confirmation modal
         document.getElementById("clear-logs-button").addEventListener("click", function () {
             document.getElementById("confirmation-modal").style.display = "block";
         });
@@ -202,23 +89,22 @@
             document.getElementById("confirmation-modal").style.display = "none";
         }
 
-        // Clear all logs
         document.getElementById("confirm-clear-button").addEventListener("click", function () {
-            document.getElementById("clear-logs-button").disabled = true;  // Disable the button
-            document.getElementById("loading").style.display = "block";  // Show loading text
+            document.getElementById("clear-logs-button").disabled = true;
+            document.getElementById("loading").style.display = "block";
 
             fetch('/clear-logs', {
-                method: 'POST', // Use POST for action request
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("loading").style.display = "none";  // Hide loading text
+                document.getElementById("loading").style.display = "none";
                 if (data.success) {
-                    document.getElementById("clear-logs-button").disabled = false;  // Enable button
-                    document.querySelector("table").style.display = 'none';  // Hide table if cleared
+                    document.getElementById("clear-logs-button").disabled = false;
+                    document.querySelector("table").style.display = 'none';
                     alert("All logs have been cleared.");
                 } else {
                     alert("Failed to clear logs.");
@@ -227,11 +113,11 @@
             .catch(error => {
                 console.error("Error clearing logs:", error);
                 alert("An error occurred while clearing logs.");
-                document.getElementById("loading").style.display = "none";  // Hide loading text
-                document.getElementById("clear-logs-button").disabled = false;  // Enable button
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("clear-logs-button").disabled = false;
             });
 
-            closeModal();  // Close modal after action
+            closeModal();
         });
     </script>
 </body>
