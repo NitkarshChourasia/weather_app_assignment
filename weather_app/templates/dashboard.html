@@ -1,127 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Dashboard</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Weather Dashboard</h1>
-        
-        <!-- City input and search button -->
-        <div class="search-bar">
-            <input type="text" id="city" placeholder="Enter city name">
-            <button onclick="fetchWeather()">Get Weather</button>
-        </div>
-        
-        <!-- Weather display section -->
-        <div id="weather-info">
-            <!-- Weather details will be dynamically added here -->
-        </div>
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 
-        <!-- Log Weather button -->
-        <div id="log-weather">
-            <button onclick="logWeather()">Log Weather</button>
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='images/background.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+        }
+    </style>
+
+
+
+</head>
+
+<!-- <body style="background: url('{{ url_for('static', filename='images/background.jpg') }}') no-repeat center center fixed; background-size: cover;"> -->
+
+<body>
+    <h1> WeatherX - Pro</h1>
+    <a href="{{ url_for('logout') }}">Logout</a>
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="Enter name of the Place" spellcheck="false">
+            <button>
+                <!-- Link to the search image -->
+                <img src="{{ url_for('static', filename='images/search.png') }}" alt="Search">
+            </button>
         </div>
-        
-        <!-- Table for logged weather data -->
-        <div id="weather-logs">
-            <h2>Logged Weather Data</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>City</th>
-                        <th>Temperature</th>
-                        <th>Pressure</th>
-                        <th>Humidity</th>
-                        <th>Wind Speed</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="log-table">
-                    <!-- Rows will be dynamically added here -->
-                </tbody>
-            </table>
+        <div class="error">
+            <p> Invalid city name </p>
+        </div>
+        <div class="weather">
+            <!-- Weather icon -->
+            <img src="{{ url_for('static', filename='images/rain.png') }}" class="weather-icon" alt="Weather Icon">
+            <h1 class="temp"> 29°C</h1>
+            <h2 class="city"> Mumbai </h2>
+            <div class="details">
+                <div class="col">
+                    <!-- Link to the humidity icon -->
+                    <img src="{{ url_for('static', filename='images/humidity.png') }}" alt="Humidity">
+                    <div>
+                        <p class="humidity"> 50% </p>
+                        <p class="text"> Humidity </p>
+                    </div>
+                </div>
+                <div class="col">
+                    <!-- Link to the wind icon -->
+                    <img src="{{ url_for('static', filename='images/wind.png') }}" alt="Wind Speed">
+                    <div>
+                        <p class="wind"> 15 km/hr </p>
+                        <p class="text"> Wind Speed </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script src="/static/app.js"></script>
+
+    <div class="log-weather">
+        <input type="text" id="place-input" placeholder="Enter name of the Place to log" spellcheck="false">
+        <button id="log-btn">
+            <img src="{{ url_for('static', filename='images/log_icon.png') }}" alt="Log">
+        </button>
+    </div>
+
+
     <script>
-        // Fetch weather data
-        function fetchWeather() {
-            const city = document.getElementById('city').value;
-            fetch(`/weather/${city}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert(data.error);
-                    } else {
-                        displayWeather(data);
-                    }
-                });
+        const apiUrl = "/weather"; // Flask endpoint to fetch weather data
+
+
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");
+        const weatherIcon = document.querySelector(".weather-icon");
+        let currentCity = ""; // To track the current city for auto-refresh
+
+        // Function to check weather and update UI
+        async function checkWeather(city) {
+            try {
+
+                onst response = await fetch(`${apiUrl}?city=${city}`);
+                if (!response.ok) {
+                    throw new Error("City not found");
+                }
+
+                const data = await response.json();
+
+                // Update weather information in the UI
+                document.querySelector(".city").innerHTML = data.name;
+                document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+                document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+                document.querySelector(".wind").innerHTML = data.wind.speed + " km/hr";
+
+                // Dynamically change weather icon based on weather condition
+                const weatherIcons = {
+                    Clouds: "{{ url_for('static', filename='images/clouds.png') }}",
+                    Clear: "{{ url_for('static', filename='images/clear.png') }}",
+                    Rain: "{{ url_for('static', filename='images/rain.png') }}",
+                    Drizzle: "{{ url_for('static', filename='images/drizzle.png') }}",
+                    Mist: "{{ url_for('static', filename='images/mist.png') }}",
+                    Snow: "{{ url_for('static', filename='images/snow.png') }}",
+                    Thunderstorm: "{{ url_for('static', filename='images/thunder.png') }}",
+                    default: "{{ url_for('static', filename='images/search.png') }}",
+                };
+
+                weatherIcon.src = weatherIcons[data.weather[0].main] || weatherIcons.default;
+
+                // Display weather card and hide error
+                document.querySelector(".weather").style.display = "block";
+                document.querySelector(".error").style.display = "none";
+            } catch (error) {
+                // Display error message
+                document.querySelector(".error").style.display = "block";
+                document.querySelector(".weather").style.display = "none";
+            }
         }
 
-        // Display weather data
-        function displayWeather(data) {
-            const weatherDiv = document.getElementById('weather-info');
-            weatherDiv.innerHTML = `
-                <p><strong>City:</strong> ${data.city}</p>
-                <p><strong>Temperature:</strong> ${data.temperature} °C</p>
-                <p><strong>Pressure:</strong> ${data.pressure} hPa</p>
-                <p><strong>Humidity:</strong> ${data.humidity}%</p>
-                <p><strong>Wind Speed:</strong> ${data.wind_speed} m/s</p>
-            `;
-        }
+        // Event listener for search button
+        searchBtn.addEventListener("click", () => {
+            const city = searchBox.value.trim();
+            if (city) {
+                currentCity = city; // Update current city for auto-refresh
+                checkWeather(city); // Fetch weather immediately
+            } else {
+                alert("Please enter a city name.");
+            }
+        });
 
-        // Log weather data
-        function logWeather() {
-            const weatherDiv = document.getElementById('weather-info');
+        // Auto-refresh weather data every 2 seconds
+        setInterval(() => {
+            if (currentCity) {
+                checkWeather(currentCity);
+            }
+        }, 4000);
+
+        // setInterval(checkWeather(city), 2000);
+
+
+
+        searchBtn.addEventListener("click", () => {
+            const city = searchBox.value.trim();
+            if (city) {
+                currentCity = city; // Update current city for auto-refresh
+                checkWeather(city); // Fetch weather immediately
+            } else {
+                alert("Please enter a city name.");
+            }
+        });
+    </script>
+    <script>
+        document.getElementById('log-btn').addEventListener('click', function () {
+            const place = document.getElementById('place-input').value;
+
+            if (place.trim() === "") {
+                alert("Please enter a place name.");
+                return;
+            }
+
+            // Replace with the actual weather data (for demo purposes)
             const weatherData = {
-                city: weatherDiv.querySelector('p:nth-child(1)').innerText.split(': ')[1],
-                temperature: weatherDiv.querySelector('p:nth-child(2)').innerText.split(': ')[1],
-                pressure: weatherDiv.querySelector('p:nth-child(3)').innerText.split(': ')[1],
-                humidity: weatherDiv.querySelector('p:nth-child(4)').innerText.split(': ')[1],
-                wind_speed: weatherDiv.querySelector('p:nth-child(5)').innerText.split(': ')[1]
+                city: place,
+                temperature: 25.0, // Example data
+                timestamp: new Date().toISOString(),
             };
 
+            // Send the weather data to the backend
             fetch('/log_weather', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(weatherData)
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(weatherData),
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    updateLogTable(weatherData);
-                } else {
-                    alert("Error logging weather data.");
-                }
-            });
-        }
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message); // Display success message
+                    } else {
+                        alert("Error logging weather data.");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
 
-        // Update logged weather data table
-        function updateLogTable(weatherData) {
-            const tableBody = document.getElementById('log-table');
-            const newRow = `
-                <tr>
-                    <td>${weatherData.city}</td>
-                    <td>${weatherData.temperature} °C</td>
-                    <td>${weatherData.pressure} hPa</td>
-                    <td>${weatherData.humidity}%</td>
-                    <td>${weatherData.wind_speed} m/s</td>
-                    <td><button onclick="deleteLog(this)">Delete</button></td>
-                </tr>
-            `;
-            tableBody.insertAdjacentHTML('beforeend', newRow);
-        }
 
-        // Delete a logged weather entry
-        function deleteLog(button) {
-            const row = button.parentElement.parentElement;
-            row.remove();
-        }
     </script>
+
 </body>
+
 </html>
