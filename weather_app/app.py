@@ -51,19 +51,21 @@ with app.app_context():
 # Utility function to fetch weather data from OpenWeather API
 @app.route("/weather", methods=["GET"])
 def fetch_weather_data():
-
     city = request.args.get('city')
+    print(city)
     if not city:
         return jsonify({"error": "City parameter is required"}), 400
 
     api_key1 = os.getenv("OPENWEATHER_API_KEY")
-    api_key2 = os.getenv("OPENWEATHER_API_KEY")
+    api_key2 = os.getenv("OPENWEATHER_API_KEY1")
     api_key = random.choice([api_key1, api_key2])
+    print(api_key)
 
 
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&APPID={api_key}&units=metric"
     response = requests.get(url)
     if response.status_code == 200:
+        print(jsonify(response.json()))
         return jsonify(response.json()) # Return the weather data as JSON
     else:
         return jsonify({"error": "City not found"}), response.status_code
