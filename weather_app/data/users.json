@@ -1,8 +1,12 @@
 {
-  "users": [
-    {
-      "username": "test_user",
-      "password": "$2b$12$Jt5yGFqtmL7g5c6.Jm8.BuwQb.E7dbVkh2lY8cI80Q0IbXyTxTwjC"  # bcrypt hashed password
-    }
-  ]
+    "users": [
+        {
+            "username": "Nitkarsh",
+            "password": "$2b$12$E6IPa3pH7XsfuVXaBV1dTOew8G0gE.JNc6L53FD8a0EFxGlkqg/hG"
+        },
+        {
+            "username": "Anmol",
+            "password": "$2b$12$5B8ARNHevlIhvFI5tD0y7uDI88r3r4tKgEc/IMlTk8oRWI5V/aFhC"
+        }
+    ]
 }

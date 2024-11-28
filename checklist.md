@@ -9,9 +9,9 @@
   - [X] Register and get an API key from OpenWeather API.
   - [X] Set up environment variable or configuration file to securely store the API key.
   - [X] Implement a function to fetch data from the OpenWeather API:
-    - [ ] Create a function to send GET requests to the OpenWeather API.
-    - [ ] Implement error handling for invalid API requests.
-  - [ ] Define the API URL format (`https://api.openweathermap.org/data/2.5/weather?q=<city>&appid=<API_KEY>`).
+    - [X] Create a function to send GET requests to the OpenWeather API.
+    - [X] Implement error handling for invalid API requests.
+  - [X] Define the API URL format (`https://api.openweathermap.org/data/2.5/weather?q=<city>&appid=<API_KEY>`).
   
 - **[ ] Fetch Required Weather Details:**
   - [ ] Retrieve **temperature** (in Celsius or Fahrenheit).
@@ -21,12 +21,12 @@
   - [ ] Retrieve **wind degree**.
 
 - **[ ] Auto-Retrieve Weather Data:**
-  - [ ] Implement auto-refresh every 2 seconds with updated weather data.
-  - [ ] Display weather data in real-time on the frontend.
+  - [X] Implement auto-refresh every 2 seconds with updated weather data.
+  - [X] Display weather data in real-time on the frontend.
 
 - **[ ] Display Weather Data:**
   - [ ] Create frontend elements to display the retrieved data (e.g., temperature, humidity, etc.).
-  - [ ] Ensure the UI dynamically updates with new data every 2 seconds.
+  - [X] Ensure the UI dynamically updates with new data every 2 seconds.
 
 - **[ ] Error Handling:**
   - [ ] Handle errors such as invalid city names, API request failures, or network issues.
