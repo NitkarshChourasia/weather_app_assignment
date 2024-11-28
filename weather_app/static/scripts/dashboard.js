@@ -1,115 +1,118 @@
-const apiUrl = "/weather"; // Flask endpoint to fetch weather data
-
-// alert('JavaScript is working!');
-
+const apiUrl = "/weather"; // Flask endpoint
 
 const searchBox = document.querySelector(".search input");
 const searchBtn = document.querySelector(".search button");
 const weatherIcon = document.querySelector(".weather-icon");
-let currentCity = ""; // To track the current city for auto-refresh
+let currentCity = ""; // Track current city for auto-refresh
 
-// Function to check weather and update UI
+// Fetch and update weather data
 async function checkWeather(city) {
     try {
-
         const response = await fetch(`${apiUrl}?city=${city}`);
-        if (!response.ok) {
-            throw new Error("City not found");
-        }
+        console.log(`Response status: ${response.status}`);
+
+        if (!response.ok) throw new Error("City not found");
 
         const data = await response.json();
+        console.log("Fetched data:", data);
 
-        // Update weather information in the UI
+        // Update weather UI
         document.querySelector(".city").innerHTML = data.name;
         document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
         document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
         document.querySelector(".wind").innerHTML = data.wind.speed + " km/hr";
 
-        // Dynamically change weather icon based on weather condition
-        const weatherIcons = {
-            Clouds: "{{ url_for('static', filename='images/clouds.png') }}",
-            Clear: "{{ url_for('static', filename='images/clear.png') }}",
-            Rain: "{{ url_for('static', filename='images/rain.png') }}",
-            Drizzle: "{{ url_for('static', filename='images/drizzle.png') }}",
-            Mist: "{{ url_for('static', filename='images/mist.png') }}",
-            Snow: "{{ url_for('static', filename='images/snow.png') }}",
-            Thunderstorm: "{{ url_for('static', filename='images/thunder.png') }}",
-            default: "{{ url_for('static', filename='images/search.png') }}",
-        };
+        if(data.weather[0].main == "Clouds") {
+            weatherIcon.src = "images/clouds.png";
+        }
+        else if(data.weather[0].main == "Clear") {
+            weatherIcon.src = "images/clear.png";
+        }
+        else if(data.weather[0].main == "Rain") {
+            weatherIcon.src = "images/rain.png";
+        }
+        else if(data.weather[0].main == "Drizzle") {
+            weatherIcon.src = "images/drizzle.png";
+        } 
+        else if(data.weather[0].main == "Mist") {
+            weatherIcon.src = "images/mist.png";
+        }
+        else if(data.weather[0].main == "Snow") {
+            weatherIcon.src = "images/snow.png";
+        }
+        else if(data.weather[0].main == "Thunderstorm") {
+            weatherIcon.src = "images/thunder.png";
+        }
+        else {
+            weatherIcon.src = "images/search.png";
+        }
 
-        weatherIcon.src = weatherIcons[data.weather[-1].main] || weatherIcons.default;
+        // No need to use JSON.parse anymore
 
-        // Display weather card and hide error
+
         document.querySelector(".weather").style.display = "block";
         document.querySelector(".error").style.display = "none";
     } catch (error) {
-        // Display error message
+        console.error("Error fetching weather:", error);
         document.querySelector(".error").style.display = "block";
         document.querySelector(".weather").style.display = "none";
     }
 }
 
-// Event listener for search button
+
+// Search button event
 searchBtn.addEventListener("click", () => {
     const city = searchBox.value.trim();
     if (city) {
-        currentCity = city; // Update current city for auto-refresh
-        checkWeather(city); // Fetch weather immediately
+        currentCity = city;
+        checkWeather(city);
     } else {
         alert("Please enter a city name.");
     }
 });
 
-// Auto-refresh weather data every 1 seconds
+// Auto-refresh every 10 minutes
 setInterval(() => {
     if (currentCity) {
         checkWeather(currentCity);
     }
-}, 10000);
+}, 600000);
 
-// setInterval(checkWeather(city), 1999);
-
-
-
-searchBtn.addEventListener("click", () => {
-    const city = searchBox.value.trim();
-    if (city) {
-        currentCity = city; // Update current city for auto-refresh
-        checkWeather(city); // Fetch weather immediately
-    } else {
-        alert("Please enter a city name.");
-    }
-});
-document.getElementById('log-btn').addEventListener('click', function () {
-    const place = document.getElementById('place-input').value;
-
-    if (place.trim() === "") {
+// Log weather event
+document.getElementById("log-btn").addEventListener("click", async () => {
+    const place = document.getElementById("place-input").value.trim();
+    if (!place) {
         alert("Please enter a place name.");
         return;
     }
 
-    // Replace with the actual weather data (for demo purposes)
+    // Create the weather data object
     const weatherData = {
         city: place,
-        temperature: 24.0, // Example data
-        timestamp: new Date().toISOString(),
+        temperature: 25, // You can dynamically fetch this or use a placeholder
+        pressure: 1013, // Example data
+        humidity: 60,  // Example data
+        wind_speed: 5, // Example data
+        wind_degree: 180 // Example data
     };
+    try {
+        const response = await fetch('/add_log_weather', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(weatherData)
+        });
+        const data = await response.json();
+        if (response.ok) {
+            alert(data.message || "Weather data logged successfully");
+        } else {
+            alert(data.error || "Error logging weather data");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("There was an error processing your request.");
+    }
 
-    // Send the weather data to the backend
-    fetch('/log_weather', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(weatherData),
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                alert(data.message); // Display success message
-            } else {
-                alert("Error logging weather data.");
-            }
-        })
-        .catch(error => console.error('Error:', error));
+
 });
