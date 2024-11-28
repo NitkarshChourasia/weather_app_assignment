@@ -5,7 +5,6 @@ const searchBtn = document.querySelector(".search button");
 const weatherIcon = document.querySelector(".weather-icon");
 let currentCity = ""; // Track current city for auto-refresh
 
-// Fetch and update weather data
 async function checkWeather(city) {
     try {
         const response = await fetch(`${apiUrl}?city=${city}`);
@@ -20,38 +19,45 @@ async function checkWeather(city) {
         document.querySelector(".city").innerHTML = data.name;
         document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
         document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
-        document.querySelector(".wind").innerHTML = data.wind.speed + " km/hr";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
 
-        if(data.weather[0].main == "Clouds") {
-            weatherIcon.src = "images/clouds.png";
-        }
-        else if(data.weather[0].main == "Clear") {
-            weatherIcon.src = "images/clear.png";
-        }
-        else if(data.weather[0].main == "Rain") {
-            weatherIcon.src = "images/rain.png";
-        }
-        else if(data.weather[0].main == "Drizzle") {
-            weatherIcon.src = "images/drizzle.png";
-        } 
-        else if(data.weather[0].main == "Mist") {
-            weatherIcon.src = "images/mist.png";
-        }
-        else if(data.weather[0].main == "Snow") {
-            weatherIcon.src = "images/snow.png";
-        }
-        else if(data.weather[0].main == "Thunderstorm") {
-            weatherIcon.src = "images/thunder.png";
-        }
-        else {
-            weatherIcon.src = "images/search.png";
+        const weatherIcon = document.querySelector(".weather-icon");
+
+        // Dynamically change the weather icon
+        const weatherCondition = data.weather[0].main;
+
+        let iconSrc = "/static/images/search.png"; // Default icon
+
+        switch (weatherCondition) {
+            case "Clouds":
+                iconSrc = "/static/images/clouds.png";
+                break;
+            case "Clear":
+                iconSrc = "/static/images/clear.png";
+                break;
+            case "Rain":
+                iconSrc = "/static/images/rain.png";
+                break;
+            case "Drizzle":
+                iconSrc = "/static/images/drizzle.png";
+                break;
+            case "Mist":
+                iconSrc = "/static/images/mist.png";
+                break;
+            case "Snow":
+                iconSrc = "/static/images/snow.png";
+                break;
+            case "Thunderstorm":
+                iconSrc = "/static/images/thunder.png";
+                break;
+            default:
+                iconSrc = "/static/images/search.png"; // If no match
+                break;
         }
 
-        // No need to use JSON.parse anymore
+        // Set the correct icon
+        weatherIcon.src = iconSrc;
 
-
-        document.querySelector(".weather").style.display = "block";
-        document.querySelector(".error").style.display = "none";
     } catch (error) {
         console.error("Error fetching weather:", error);
         document.querySelector(".error").style.display = "block";
