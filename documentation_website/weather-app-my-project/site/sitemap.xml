@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
+         <loc>https://github.com/NitkarshChourasia/</loc>
+         <lastmod>2024-11-29</lastmod>
+    </url>
+    <url>
          <loc>https://github.com/NitkarshChourasia/Challenges%20in%20Deploying%20a%20Full-Stack%20Weather%20App-Platform%20Limitations%20and%20Final%20Resolution/</loc>
          <lastmod>2024-11-29</lastmod>
     </url>
