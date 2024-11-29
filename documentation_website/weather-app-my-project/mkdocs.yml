@@ -1,14 +1,25 @@
-site_name: Learn Python Programming Language
+site_name: Weather App Documentation
 # site_url: https://james-willett.github.io/mkdocs-material-youtube-tutorial/
 # site_url: https://example.com/
 site_url: https://github.com/NitkarshChourasia
 
 nav:
-  - Home: README.md
-  - Downloads: README.md
-  - Music: README.md
-  - Assets: README.md
-  - About: README.md
+  - Project Overview: 'Overview of Project Structure for Weather Application.md'
+  - Objective: 'Objective-Weather Data Management Web Application with User Authentication.md'
+  - Security Features:
+      - 'Overall_security_featues.md'
+      - 'How_CSRF_Protection_Enhances_Security_in_Flask_WeatherApp.md'
+      - 'Password_Hashing_in_Flask_Application.md'
+      - 'Implementing_Secure_Cookies_for_Enhanced_Security_in_Flask.md'
+  - API & Dynamic Data:
+      - 'Dynamic API Key Selection and Secure Secret Key Generation in Flask.md'
+      - 'Implementing Auto-Refresh for Real-Time Weather Data in a Flask Application.md'
+  - Input Validation: 'Input_Validation_Flask_Application.md'
+  - Session Management: 'flask_session_timeout.md'
+  - User Experience:
+      - 'Seamless Night Mode Integration for Enhanced User Experience.md'
+  - Logging: 'Effective Logging Practices in Flask Applications.md'
+  - Challenges and Resolution: 'Challenges in Deploying a Full-Stack Weather App-Platform Limitations and Final Resolution.md'
 
 theme:
   name: material
@@ -22,6 +33,7 @@ theme:
     - content.tabs.link
     - content.code.annotation
     - content.code.copy
+    - dark_mode: true
   language: en
   palette:
     - scheme: default
@@ -51,6 +63,8 @@ extra:
       link: https://www.linkedin.com/in/willettjames/ # Put mine. Here.
       link: https://www.linkedin.com/in/nitkarshchourasia
 
+
+
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -65,12 +79,13 @@ markdown_extensions:
   - pymdownx.mark
   - attr_list
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.magiclink
 
 copyright: |
-  <!-- &copy; 2023 <a href="https://github.com/james-willett"  target="_blank" rel="noopener">James Willett</a> -->
-  &copy; 2023 <a href="https://github.com/NitkarshChourasia"  target="_blank" rel="noopener">Nitkarsh Chourasia</a>
+  <!-- &copy; 2024 <a href="https://github.com/james-willett"  target="_blank" rel="noopener">James Willett</a> -->
+  &copy; 2024 <a href="https://github.com/NitkarshChourasia"  target="_blank" rel="noopener">Nitkarsh Chourasia</a>
 
 # At the last ask bing how to improve it further.
 
