@@ -4,8 +4,8 @@ site_name: Weather App Documentation
 site_url: https://github.com/NitkarshChourasia
 
 nav:
-  - Project Overview: 'Overview of Project Structure for Weather Application.md'
   - Objective: 'Objective-Weather Data Management Web Application with User Authentication.md'
+  - Project Overview: 'Overview of Project Structure for Weather Application.md'
   - Security Features:
       - 'Overall_security_featues.md'
       - 'How_CSRF_Protection_Enhances_Security_in_Flask_WeatherApp.md'

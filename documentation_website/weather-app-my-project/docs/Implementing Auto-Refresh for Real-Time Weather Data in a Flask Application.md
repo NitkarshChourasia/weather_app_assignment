@@ -1,5 +1,3 @@
-In the code provided, **auto-refresh** is implemented for fetching weather data via a Flask API endpoint (`/weather`) every 10 minutes. Here's a detailed explanation of how this works:
-
 ### **How Auto-Refresh is Implemented**
 
 1. **Tracking the Current City:**

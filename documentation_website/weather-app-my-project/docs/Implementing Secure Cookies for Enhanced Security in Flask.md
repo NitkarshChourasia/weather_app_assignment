@@ -1,8 +1,3 @@
-The filename for the secure cookies documentation will be: `flask_secure_cookies.md`.
-
-Here's the generated content for the `.md` file:
-
-```markdown
 # Secure Cookies in Flask Program
 
 ## Overview
@@ -90,7 +85,3 @@ Secure cookies are critical to maintaining the confidentiality, integrity, and a
 ## 4. Conclusion
 
 Secure cookies are an essential part of web application security. In the Flask program, the use of `SESSION_COOKIE_SECURE`, `SESSION_COOKIE_HTTPONLY`, and `SESSION_COOKIE_SAMESITE` ensures that session cookies are transmitted securely, protected from client-side access, and restricted in cross-site contexts to mitigate common web application attacks like XSS and CSRF. By implementing these settings, the program ensures that user sessions and sensitive data are better protected against unauthorized access.
-
-```
-
-This `.md` file provides a detailed explanation of the secure cookie feature, its importance, how it is implemented in the Flask program, and why it enhances web application security.

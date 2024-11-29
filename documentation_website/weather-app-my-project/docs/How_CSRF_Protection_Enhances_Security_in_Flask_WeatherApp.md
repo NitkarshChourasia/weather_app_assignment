@@ -1,7 +1,3 @@
-Certainly! Below is a concise, yet detailed **Markdown documentation** for CSRF protection in your Flask WeatherApp, formatted in a way that is both easy for technical and non-technical audiences to understand:
-
----
-
 # CSRF Protection in Flask WeatherApp
 
 ## **What is CSRF?**
@@ -71,11 +67,3 @@ In this example, each time a user submits the form, the CSRF token is sent with 
 ## **Conclusion**
 
 By integrating **CSRF protection** into the **Flask WeatherApp**, we ensure that the app is secure against malicious attacks that could compromise users' personal data or actions. The use of `Flask-WTF` makes implementing this protection seamless, and the use of CSRF tokens adds a critical layer of security to the forms users interact with.
-
----
-
-This document provides a clear understanding of CSRF protection, its importance, and how it's implemented in your app, making it understandable for both technical and non-technical users.
-
----
-
-Let me know if you'd like to adjust or add anything to this documentation!

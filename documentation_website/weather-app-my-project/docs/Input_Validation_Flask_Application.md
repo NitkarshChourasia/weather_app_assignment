@@ -1,9 +1,3 @@
-The filename for the documentation could be: **"Input_Validation_in_Flask_Application.md"**
-
-Here's how the documentation for **Input Validation** in your Flask program can be structured:
-
----
-
 # Input Validation in Flask Application
 
 ## Overview
@@ -86,7 +80,3 @@ This prevents attackers from injecting SQL code through user input.
 ## Conclusion
 
 Input validation is an essential security feature that helps protect the application from several common attack vectors like SQL injection and XSS. By implementing thorough checks and sanitization processes, the above Flask program reduces the risk of malicious data input and ensures that the application operates securely.
-
----
-
-This file would be named **Input_Validation_in_Flask_Application.md**. Let me know if you need any further adjustments!

@@ -44,5 +44,3 @@ The goal of this project is to build a **weather data management web application
 - **Database**: SQLite (or PostgreSQL)
 - **Weather API**: OpenWeather API
 - **Authentication**: JSON file-based user authentication
-
-This project will demonstrate your ability to create a secure, functional web application with weather data management features, integrating both frontend and backend technologies, while ensuring proper error handling and data persistence.
