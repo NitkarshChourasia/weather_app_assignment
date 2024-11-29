@@ -280,7 +280,6 @@ def fetch_weather_data():
 
         weather_condition = data["weather"][0]["main"]
         weather_description = data["weather"][0]["description"]
-        weather_icon = data["weather"][0]["icon"]
         city_name = data["name"]
         temp = round(data["main"]["temp"])
         humidity = data["main"]["humidity"]
