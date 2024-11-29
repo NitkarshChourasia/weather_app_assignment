@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Logs</title>
-    <link rel="stylesheet" href="weather_logs.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/weather_logs.css') }}">
 </head>
 
 <body>
@@ -30,9 +30,14 @@
                 </thead>
                 <tbody>
                     {% for log in logs %}
-                    <tr id="log-{{ log.id }}">
+                    <tr id="{{ log.id }}">
+                        <td>{{ log.id }}</td>
                         <td>{{ log.city }}</td>
                         <td>{{ log.temperature }} °C</td>
+                        <td>{{ log.pressure}} °C</td>
+                        <td>{{ log.humidity}} °C</td>
+                        <td>{{ log.wind_speed}} °C</td>
+                        <td>{{ log.wind_degree}} °C</td>
                         <td>{{ log.timestamp }}</td>
                         <td>
                             <button onclick="deleteLog({{ log.id }})" class="btn-delete">Delete</button>
@@ -59,27 +64,35 @@
             document.body.classList.toggle("night-mode");
         }
 
-        function deleteLog(logId) {
-            fetch(`/delete_log/${logId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message === "Log deleted successfully") {
-                    alert(data.message);
-                    document.getElementById(`log-${logId}`).remove();
-                } else {
-                    alert('Failed to delete log: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error deleting log');
-            });
+function deleteLog(logId, retries = 3) {
+    fetch(`/delete_log/${logId}`, {
+        method: 'POST',
+    })
+    .then(response => {
+        if (response.status === 200) {
+            return response.json();  // Process JSON only if status is 200
+        } else {
+            throw new Error(`Failed to delete log, server returned status ${response.status}`);
         }
+    })
+    .then(data => {
+        if (data.status === "success" && data.message === "Log deleted successfully") {
+            alert(data.message);  // Success message
+            document.getElementById(`${logId}`).remove();  // Remove the log from the UI
+        } else {
+            alert('Failed to delete log: ' + data.message);  // Error message from server
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        if (retries > 0) {
+            console.log(`Retrying... ${retries} attempts left.`);
+            deleteLog(logId, retries - 1);  // Retry the deletion if attempts left
+        } else {
+            alert('Error deleting log after multiple attempts');  // Final failure message
+        }
+    });
+}
 
         document.getElementById("clear-logs-button").addEventListener("click", function () {
             document.getElementById("confirmation-modal").style.display = "block";
@@ -95,27 +108,29 @@
 
             fetch('/clear-logs', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
             })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("loading").style.display = "none";
-                if (data.success) {
+                .then(response => {
+                    if (response.status !== 200) {
+                        throw new Error(`Failed to clear logs, server returned status ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("loading").style.display = "none";
+                    if (data.success) {
+                        document.getElementById("clear-logs-button").disabled = false;
+                        document.querySelector("table").style.display = 'none';
+                        alert("All logs have been cleared.");
+                    } else {
+                        alert("Failed to clear logs.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error clearing logs:", error);
+                    alert("An error occurred while clearing logs.");
+                    document.getElementById("loading").style.display = "none";
                     document.getElementById("clear-logs-button").disabled = false;
-                    document.querySelector("table").style.display = 'none';
-                    alert("All logs have been cleared.");
-                } else {
-                    alert("Failed to clear logs.");
-                }
-            })
-            .catch(error => {
-                console.error("Error clearing logs:", error);
-                alert("An error occurred while clearing logs.");
-                document.getElementById("loading").style.display = "none";
-                document.getElementById("clear-logs-button").disabled = false;
-            });
+                });
 
             closeModal();
         });
