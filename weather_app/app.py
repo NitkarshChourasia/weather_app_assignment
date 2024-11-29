@@ -18,15 +18,9 @@ from sqlalchemy import func
 from dotenv import load_dotenv
 from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
-# from secret_key_generator import generate_secret_key
+from secret_key_generator import generate_secret_key
 from models import db, WeatherLog
 from flask_migrate import Migrate
-import secrets
-
-
-
-def generate_secret_key():
-    return secrets.token_hex(2048)
 
 
 # Load environment variables from .env
