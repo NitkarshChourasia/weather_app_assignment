@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://github.com/NitkarshChourasia/Overall_security_featues/">
       
       
-        <link rel="prev" href="../Objective-Weather%20Data%20Management%20Web%20Application%20with%20User%20Authentication/">
+        <link rel="prev" href="../Overview%20of%20Project%20Structure%20for%20Weather%20Application/">
       
       
         <link rel="next" href="../How_CSRF_Protection_Enhances_Security_in_Flask_WeatherApp/">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Overall security featues - Weather App Documentation</title>
+        <title>Security Features in Flask Program - Weather App Documentation</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#usefulness" class="md-skip">
+        <a href="#security-features-in-flask-program" class="md-skip">
           Skip to content
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Overall security featues
+              Security Features in Flask Program
             
           </span>
         </div>
@@ -205,12 +205,12 @@
   
   
     <li class="md-tabs__item">
-      <a href="../Overview%20of%20Project%20Structure%20for%20Weather%20Application/" class="md-tabs__link">
+      <a href="../Objective-Weather%20Data%20Management%20Web%20Application%20with%20User%20Authentication/" class="md-tabs__link">
         
   
     
   
-  Project Overview
+  Objective
 
       </a>
     </li>
@@ -222,12 +222,12 @@
   
   
     <li class="md-tabs__item">
-      <a href="../Objective-Weather%20Data%20Management%20Web%20Application%20with%20User%20Authentication/" class="md-tabs__link">
+      <a href="../Overview%20of%20Project%20Structure%20for%20Weather%20Application/" class="md-tabs__link">
         
   
     
   
-  Objective
+  Project Overview
 
       </a>
     </li>
@@ -400,11 +400,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../Overview%20of%20Project%20Structure%20for%20Weather%20Application/" class="md-nav__link">
+      <a href="../Objective-Weather%20Data%20Management%20Web%20Application%20with%20User%20Authentication/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Project Overview
+    Objective
   </span>
   
 
@@ -420,11 +420,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../Objective-Weather%20Data%20Management%20Web%20Application%20with%20User%20Authentication/" class="md-nav__link">
+      <a href="../Overview%20of%20Project%20Structure%20for%20Weather%20Application/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Objective
+    Project Overview
   </span>
   
 
@@ -491,12 +491,14 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
   <span class="md-ellipsis">
-    Overall security featues
+    Security Features in Flask Program
   </span>
   
 
@@ -507,7 +509,7 @@
         
   
   <span class="md-ellipsis">
-    Overall security featues
+    Security Features in Flask Program
   </span>
   
 
@@ -519,6 +521,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -527,11 +531,53 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-password-hashing" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Password Hashing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Password Hashing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-password-hashing-is-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Password Hashing is Important
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-password-hashing-is-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      How Password Hashing is Done
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#usefulness" class="md-nav__link">
     <span class="md-ellipsis">
       Usefulness
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -699,7 +745,7 @@
         
   
   <span class="md-ellipsis">
-    How CSRF Protection Enhances Security in Flask WeatherApp
+    CSRF Protection in Flask WeatherApp
   </span>
   
 
@@ -1010,32 +1056,19 @@
                   
 
 
-  <h1>Overall security featues</h1>
-
-<p>The filename for the documentation will be: <code>flask_program_security_features.md</code>.</p>
-<p>Here's the generated content for the <code>.md</code> file:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gh"># Security Features in Flask Program</span>
+<h1 id="security-features-in-flask-program">Security Features in Flask Program</h1>
+<h2 id="overview">Overview</h2>
+<p>This document explains the security features implemented in the Flask program. The key features covered here include password hashing, Flask secret key generation, Cross-Site Request Forgery (CSRF) protection, and other important security measures implemented in the program.</p>
+<h2 id="1-password-hashing">1. Password Hashing</h2>
+<h3 id="why-password-hashing-is-important">Why Password Hashing is Important</h3>
+<p>Password hashing is an essential security feature for any web application that handles sensitive user data. Storing plain-text passwords can be dangerous because if the database is compromised, attackers can easily retrieve users' passwords. Hashing transforms the password into a fixed-length string, which is non-reversible. This ensures that even if an attacker gains access to the database, they cannot retrieve the original passwords.</p>
+<h3 id="how-password-hashing-is-done">How Password Hashing is Done</h3>
+<p>In the Flask program, password hashing is implemented using the <code>werkzeug.security</code> module. The <code>generate_password_hash()</code> function is used to securely hash the password before storing it in the database. When the user logs in, the password they enter is hashed using the same method and compared with the stored hash.</p>
+<p>Example:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">werkzeug.security</span> <span class="kn">import</span> <span class="n">generate_password_hash</span><span class="p">,</span> <span class="n">check_password_hash</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="gu">## Overview</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>This document explains the security features implemented in the Flask program. The key features covered here include password hashing, Flask secret key generation, Cross-Site Request Forgery (CSRF) protection, and other important security measures implemented in the program.
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="gu">## 1. Password Hashing</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="gu">### Why Password Hashing is Important</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>Password hashing is an essential security feature for any web application that handles sensitive user data. Storing plain-text passwords can be dangerous because if the database is compromised, attackers can easily retrieve users&#39; passwords. Hashing transforms the password into a fixed-length string, which is non-reversible. This ensures that even if an attacker gains access to the database, they cannot retrieve the original passwords.
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="gu">### How Password Hashing is Done</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>In the Flask program, password hashing is implemented using the <span class="sb">`werkzeug.security`</span> module. The <span class="sb">`generate_password_hash()`</span> function is used to securely hash the password before storing it in the database. When the user logs in, the password they enter is hashed using the same method and compared with the stored hash.
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>Example:
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>```python
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>from werkzeug.security import generate_password_hash, check_password_hash
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>hashed_password = generate_password_hash(password)
-</code></pre></div>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">hashed_password</span> <span class="o">=</span> <span class="n">generate_password_hash</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+</code></pre></div></p>
 <p>When validating a password during login:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">if</span> <span class="n">check_password_hash</span><span class="p">(</span><span class="n">stored_hash</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="c1"># Proceed with login</span>
@@ -1084,9 +1117,7 @@
 <li><strong>Input Validation</strong>: Reduces the risk of common web security vulnerabilities, such as SQL injection and XSS.</li>
 </ul>
 <h2 id="conclusion">Conclusion</h2>
-<p>The Flask program incorporates several important security measures to protect against common threats. These features, including password hashing, secret key generation, CSRF protection, secure cookies, session timeout, and input validation, ensure that the application is secure and that user data remains protected. By following best practices in security, this program helps mitigate risks and build a more secure web application.
-```</p>
-<p>This <code>.md</code> file provides a detailed explanation of the security features implemented in the Flask program, including the rationale behind each feature and how it enhances the application's security.</p>
+<p>The Flask program incorporates several important security measures to protect against common threats. These features, including password hashing, secret key generation, CSRF protection, secure cookies, session timeout, and input validation, ensure that the application is secure and that user data remains protected. By following best practices in security, this program helps mitigate risks and build a more secure web application.</p>
 
 
 
