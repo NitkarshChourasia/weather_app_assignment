@@ -13,31 +13,31 @@ This is a Python-based web application that allows users to retrieve, log, and m
 ### **Screenshots: A Visual Tour of the App** 🖼️
 
 #### **1. Login Page - Night Mode**
-![Login Page - Black Theme](static/images/static_README/login_page_black_theme.png)
+![Login Page - Black Theme](/weather_app/static/images/static_README/login_page_black_theme.png)
 
 #### **2. Login Page - Day Mode**
-![Login Page - White Theme](static/images/static_README/login_page_white_theme.png)
+![Login Page - White Theme](/weather_app/static/images/static_README/login_page_white_theme.png)
 
 ---
 
 #### **3. Registration Page - Night Mode**
-![Registration Page - Black Theme](static/images/static_README/register_page_black_theme.png)
+![Registration Page - Black Theme](/weather_app/static/images/static_README/register_page_black_theme.png)
 
 #### **4. Registration Page - Day Mode**
-![Registration Page - White Theme](static/images/static_README/register_page_white_theme.png)
+![Registration Page - White Theme](/weather_app/static/images/static_README/register_page_white_theme.png)
 
 ---
 
 #### **5. Dashboard**
-![Dashboard](static/images/static_README/dashboard_page.png)
+![Dashboard](/weather_app/static/images/static_README/dashboard_page.png)
 
 ---
 
 #### **6. Weather Logs Page - Night Mode**
-![Weather Logs Page - Black Theme](static/images/static_README/weather_logs_page_black_theme.png)
+![Weather Logs Page - Black Theme](/weather_app/static/images/static_README/weather_logs_page_black_theme.png)
 
 #### **7. Weather Logs Page - Day Mode**
-![Weather Logs Page - White Theme](static/images/static_README/weather_logs_page_white_theme.png)
+![Weather Logs Page - White Theme](/weather_app/static/images/static_README/weather_logs_page_white_theme.png)
 
 ---
 
