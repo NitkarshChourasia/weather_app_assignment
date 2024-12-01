@@ -4,12 +4,43 @@
 
 This is a Python-based web application that allows users to retrieve, log, and manage weather data. It features secure user authentication, real-time weather data retrieval using the OpenWeather API, and persistent logging with a PostgreSQL database.
 
-<!-- ### **Live Demo**
-🌐 [Weather App Assignment](https://weather-app-assignment-green.vercel.app/) -->
+---
 
-### **Extensive Documentation**
+### **Screenshots: A Visual Tour of the App** 🖼️
 
-📖 [Weather App Documentation](https://nitkarshchourasia.me/)
+#### **1. Login Page - Night Mode**
+
+![Login Page - Black Theme](img/login_page_black_theme.png)
+
+#### **2. Login Page - Day Mode**
+
+![Login Page - White Theme](img/login_page_white_theme.png)
+
+---
+
+#### **3. Registration Page - Night Mode**
+
+![Registration Page - Black Theme](img/register_page_black_theme.png)
+
+#### **4. Registration Page - Day Mode**
+
+![Registration Page - White Theme](img/register_page_white_theme.png)
+
+---
+
+#### **5. Dashboard**
+
+![Dashboard](img/dashboard_page.png)
+
+---
+
+#### **6. Weather Logs Page - Night Mode**
+
+![Weather Logs Page - Black Theme](img/weather_logs_page_black_theme.png)
+
+#### **7. Weather Logs Page - Day Mode**
+
+![Weather Logs Page - White Theme](img/weather_logs_page_white_theme.png)
 
 ---
 
@@ -113,143 +144,3 @@ This is a Python-based web application that allows users to retrieve, log, and m
    Navigate to [http://localhost:5000](http://localhost:5000) in your browser.
 
 ---
-
-## **Project Structure** 📂
-
-```plaintext
-weather_app/
-│
-├── __pycache__/                  # Compiled Python cache files
-│   ├── app.cpython-312.pyc
-│   ├── models.cpython-312.pyc
-│   └── secret_key_generator.cpython-312.pyc
-│
-├── app.log                       # Application logs
-├── app.py                        # Main application entry point
-├── data/                         # Directory for data files
-│   └── users.json                # Stores user credentials
-│
-├── models.py                     # Database models and ORM definitions
-├── secret_key_generator.py       # Utility to generate secret keys
-├── static/                       # Static files (images, styles, scripts)
-│   ├── images/                   # Images used in the application
-│   │   ├── background.jpg
-│   │   ├── clear.png
-│   │   ├── clouds.png
-│   │   └── ... (more weather-related icons)
-│   │
-│   ├── scripts/                  # JavaScript files
-│   │   └── dashboard.js
-│   │
-│   └── styles/                   # CSS stylesheets
-│       ├── dashboard.css
-│       ├── login_register.css
-│       └── weather_logs.css
-│
-├── templates/                    # HTML templates for Flask rendering
-│   ├── dashboard.html
-│   ├── login.html
-│   ├── register.html
-│   └── weather_logs.html
-│
-├── README.md                     # Project documentation
-├── requirements.txt              # Python dependencies
-└── utils.py                      # Helper functions and utilities
-```
-
----
-
-## **Challenges Faced & Resolutions** ⚡
-
-1. **Hosting Issues**
-
-   - Resolved by refining Vercel configuration and Docker setup.
-
-2. **API Key Security**
-
-   - Secured by using `.env` files and environment variables.
-
-3. **Database Scalability**
-   - Moved from SQLite to PostgreSQL for better handling of concurrent requests.
-
----
-
-## **Future Enhancements** 🛠️
-
-- Full AWS integration for backend and database.
-- Improved user analytics for weather data trends.
-- Real-time push notifications for severe weather alerts.
-
----
-
-## **Contributing** 🤝
-
-Contributions are welcome! Feel free to submit issues and pull requests.
-
----
-
-## **License** 📜
-
-This project is licensed under the GPL-3.0 License. See the [LICENSE](LICENSE) file for details.
-
----
-
-## **Contact Me** 📞
-
-💼 **Nitkarsh Chourasia**
-
-- 📧 Email: [playnitkarsh@gmail.com](mailto:playnitkarsh@gmail.com)
-- 🌐 [GitHub](https://github.com/NitkarshChourasia) | [LinkedIn](https://www.linkedin.com/) | [LeetCode](https://leetcode.com/)
-
-<!--
-
-weather_app/
-│
-├── app/                       # Application core
-│   ├── __init__.py            # App factory and initialization
-│   ├── models.py              # Database models
-│   ├── routes/                # Blueprint routes
-│   │   ├── __init__.py        # Blueprint initialization
-│   │   ├── auth.py            # Authentication routes (login/register)
-│   │   ├── dashboard.py       # Dashboard-related routes
-│   │   └── weather_logs.py    # Weather logging routes
-│   ├── services/              # Service layer (e.g., API integrations)
-│   │   ├── __init__.py        # Service initialization
-│   │   └── weather_api.py     # OpenWeather API interactions
-│   ├── utils/                 # Helper functions
-│   │   ├── __init__.py        # Utility initialization
-│   │   ├── logger.py          # Logging utilities
-│   │   └── data_handler.py    # User and data manipulation utilities
-│   ├── static/                # Static files (CSS, JS, Images)
-│   │   ├── images/            # Images used in the app
-│   │   ├── scripts/           # JavaScript files
-│   │   └── styles/            # CSS stylesheets
-│   └── templates/             # HTML templates
-│       ├── layout.html        # Base template for consistent layout
-│       ├── dashboard.html     # Dashboard page
-│       ├── login.html         # Login page
-│       ├── register.html      # Registration page
-│       └── weather_logs.html  # Weather logs page
-│
-├── data/                      # Data-related files
-│   └── users.json             # Mock user data for authentication
-│
-├── logs/                      # Log files
-│   └── app.log                # Application log file
-│
-├── tests/                     # Unit and integration tests
-│   ├── __init__.py            # Test suite initialization
-│   ├── test_auth.py           # Tests for authentication
-│   ├── test_weather_api.py    # Tests for weather API integration
-│   └── test_weather_logs.py   # Tests for weather logging
-│
-├── migrations/                # Database migration scripts
-│   └── (Auto-generated files by Flask-Migrate)
-│
-├── .env                       # Environment variables (ignored in Git)
-├── .gitignore                 # Files and directories to be ignored by Git
-├── LICENSE                    # License file
-├── README.md                  # Project documentation
-├── requirements.txt           # Python dependencies
-├── secret_key_generator.py    # Script to generate Flask secret keys
-└── wsgi.py                    # WSGI entry point for deployment -->
