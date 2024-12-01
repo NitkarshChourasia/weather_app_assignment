@@ -1,35 +1,59 @@
 ### Hosting and Deployment Challenges for Weather App Project
 
-During the deployment phase of my **Weather Data Management Web Application**, I faced several challenges while trying to host the project on various platforms. Below is a detailed account of the steps I took, the issues I encountered, and the final resolution.
+During the deployment phase of my **Weather Data Management Web Application**, I encountered several challenges while attempting to host the project across various platforms. Here is a detailed breakdown of the steps taken, the issues faced, and the final outcomes.
 
-#### 1. **Vercel Deployment**:
-I initially attempted to deploy the Flask-based weather app on **Vercel**, a popular platform for hosting web applications. While Vercel supports dynamic deployments, it faced issues due to the database integration.
+---
 
-- **Issue**: The free tier of Vercel does not support the usage of relational databases like **PostgreSQL** for full-stack applications. The PostgreSQL database was a crucial component for storing user-specific weather logs in this project.
-- **Result**: The application could not be deployed successfully with a PostgreSQL database, and I was unable to utilize the dynamic server-side features in production. If the application were to run without a database (using in-memory data storage or simpler configurations), it would have worked fine.
+#### **1. Vercel Deployment**
+I initially tried to deploy the Flask-based weather app on **Vercel**, known for its seamless support for frontend frameworks and serverless functions. However, integrating the backend and database encountered obstacles.
 
-#### 2. **AWS Deployment**:
-Next, I explored hosting the project on **AWS**. AWS provides various services like **EC2** for backend hosting and **RDS** for database hosting, along with other services for deploying full-stack applications.
+- **Issue**: The free tier of Vercel does not support relational databases like **PostgreSQL**, which was essential for storing user-specific weather logs. Although the app could run with in-memory storage or simpler configurations, it could not support the database-dependent functionality in production.
+- **Outcome**: The deployment failed due to the lack of support for PostgreSQL databases in Vercel's free tier.
 
-- **Issue**: While AWS does support both backend and database hosting, the costs involved were a significant concern. AWS services, particularly for hosting a **PostgreSQL** database along with backend services, require a paid plan, which was beyond the budget for this project.
-- **Result**: Due to the costs associated with AWS, I could not proceed with the deployment of the full-stack application on this platform. I needed a more affordable solution that would accommodate both backend and database hosting.
+---
 
-#### 3. **GitHub Pages**:
-I also considered using **GitHub Pages**, a free service provided by GitHub for hosting static websites. GitHub Pages is designed for frontend applications and can host HTML, CSS, and JavaScript files.
+#### **2. AWS Deployment**
+Next, I explored **AWS**, leveraging its robust suite of services like **EC2** for backend hosting and **RDS** for database management.
 
-- **Issue**: GitHub Pages only supports static pages and does not allow for hosting backend services such as Flask applications or managing databases. As my weather app was a **full-stack** project with both frontend and backend components (Flask app and PostgreSQL), this platform could not accommodate the dynamic server-side code and database storage.
-- **Result**: Since GitHub Pages only supports static content, it was not a viable option for hosting the full-stack Flask app with dynamic backend processing and database storage.
+- **Issue**: While AWS offers comprehensive solutions for full-stack applications, including backend and database hosting, the associated costs were beyond the budget of this project. Particularly, hosting a **PostgreSQL** database and backend services required a paid plan.
+- **Outcome**: I couldn't proceed with AWS due to the costs involved.
 
-#### 4. **Final Resolution**: GitHub Repository Hosting
-After exploring multiple options, I finally settled on **uploading the project code to GitHub**. While the app could not be hosted live in a production environment, I chose to showcase the project by making the complete source code available on GitHub for review and further development.
+---
 
-- **Reasoning**: By uploading the project to GitHub, I could still share the project with others, provide access to the code for learning purposes, and allow for potential collaboration or improvements. Although the app could not be hosted live due to database restrictions on free hosting platforms, GitHub provided a great alternative for storing and sharing the code.
+#### **3. Azure Deployment**
+I also considered deploying the project on **Microsoft Azure**, a cloud platform with similar offerings to AWS.
 
-### Conclusion:
-In summary, during the deployment phase of my Flask-based **Weather Data Management Web Application**, I faced multiple challenges regarding platform compatibility, database integration, and budget constraints. The key platforms I explored—Vercel, AWS, and GitHub Pages—each had their limitations:
+- **Issue**: Hosting the Flask app and PostgreSQL database on Azure incurred costs, which were a significant constraint for this project. As a result, I was unable to deploy the application on Azure.
+- **Outcome**: The deployment on Azure was not feasible due to budget limitations.
 
-- **Vercel**: Free tier did not support PostgreSQL database.
-- **AWS**: Required paid services for backend and database hosting.
-- **GitHub Pages**: Could only host static content, not dynamic Flask applications.
+---
 
-Ultimately, I decided to **upload the project code to GitHub** as a solution, enabling others to access the source code and make use of the project while bypassing the hosting issues encountered.
+#### **4. GitHub Pages**
+Since GitHub Pages provides free hosting for static websites, I explored hosting the frontend or documentation site there.
+
+- **Issue**: GitHub Pages does not support backend services or dynamic content, making it unsuitable for the full-stack Flask application.
+- **Outcome**: GitHub Pages was used to host the **static documentation** of the project successfully.
+
+---
+
+#### **Final Resolution**
+Given the challenges of hosting the full-stack app, I decided to:
+
+1. **Upload the source code to GitHub**:  
+   - This allows others to review, learn from, and collaborate on the project.  
+   - The app itself couldn't be hosted live due to database restrictions and platform constraints.
+
+2. **Host the project documentation on GitHub Pages**:  
+   - The static documentation was successfully hosted on **GitHub Pages** and linked to a custom domain I purchased:  
+     **[nitkarshchourasia.me](https://nitkarshchourasia.me)**.
+
+---
+
+### **Conclusion**
+In summary, deploying the Flask-based **Weather Data Management Web Application** involved navigating platform limitations, database integration issues, and budget constraints. Key observations include:
+
+- **Vercel**: Free tier lacked support for PostgreSQL.  
+- **AWS and Azure**: Reliable but costly for backend and database hosting.  
+- **GitHub Pages**: Ideal for static content but unsuitable for the dynamic app.
+
+Ultimately, I hosted the **documentation site** successfully on GitHub Pages, linked to my custom domain, while making the project’s **source code available on GitHub** for accessibility and collaboration.
