@@ -877,7 +877,7 @@
           <li class="md-nav__item">
   <a href="#1-vercel-deployment" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Vercel Deployment:
+      1. Vercel Deployment
     </span>
   </a>
   
@@ -886,25 +886,34 @@
           <li class="md-nav__item">
   <a href="#2-aws-deployment" class="md-nav__link">
     <span class="md-ellipsis">
-      2. AWS Deployment:
+      2. AWS Deployment
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-github-pages" class="md-nav__link">
+  <a href="#3-azure-deployment" class="md-nav__link">
     <span class="md-ellipsis">
-      3. GitHub Pages:
+      3. Azure Deployment
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#4-final-resolution-github-repository-hosting" class="md-nav__link">
+  <a href="#4-github-pages" class="md-nav__link">
     <span class="md-ellipsis">
-      4. Final Resolution: GitHub Repository Hosting
+      4. GitHub Pages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#final-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final Resolution
     </span>
   </a>
   
@@ -918,7 +927,7 @@
         <li class="md-nav__item">
   <a href="#conclusion" class="md-nav__link">
     <span class="md-ellipsis">
-      Conclusion:
+      Conclusion
     </span>
   </a>
   
@@ -950,38 +959,59 @@
   <h1>Challenges and Resolution</h1>
 
 <h3 id="hosting-and-deployment-challenges-for-weather-app-project">Hosting and Deployment Challenges for Weather App Project</h3>
-<p>During the deployment phase of my <strong>Weather Data Management Web Application</strong>, I faced several challenges while trying to host the project on various platforms. Below is a detailed account of the steps I took, the issues I encountered, and the final resolution.</p>
-<h4 id="1-vercel-deployment">1. <strong>Vercel Deployment</strong>:</h4>
-<p>I initially attempted to deploy the Flask-based weather app on <strong>Vercel</strong>, a popular platform for hosting web applications. While Vercel supports dynamic deployments, it faced issues due to the database integration.</p>
+<p>During the deployment phase of my <strong>Weather Data Management Web Application</strong>, I encountered several challenges while attempting to host the project across various platforms. Here is a detailed breakdown of the steps taken, the issues faced, and the final outcomes.</p>
+<hr />
+<h4 id="1-vercel-deployment"><strong>1. Vercel Deployment</strong></h4>
+<p>I initially tried to deploy the Flask-based weather app on <strong>Vercel</strong>, known for its seamless support for frontend frameworks and serverless functions. However, integrating the backend and database encountered obstacles.</p>
 <ul>
-<li><strong>Issue</strong>: The free tier of Vercel does not support the usage of relational databases like <strong>PostgreSQL</strong> for full-stack applications. The PostgreSQL database was a crucial component for storing user-specific weather logs in this project.</li>
-<li><strong>Result</strong>: The application could not be deployed successfully with a PostgreSQL database, and I was unable to utilize the dynamic server-side features in production. If the application were to run without a database (using in-memory data storage or simpler configurations), it would have worked fine.</li>
+<li><strong>Issue</strong>: The free tier of Vercel does not support relational databases like <strong>PostgreSQL</strong>, which was essential for storing user-specific weather logs. Although the app could run with in-memory storage or simpler configurations, it could not support the database-dependent functionality in production.</li>
+<li><strong>Outcome</strong>: The deployment failed due to the lack of support for PostgreSQL databases in Vercel's free tier.</li>
 </ul>
-<h4 id="2-aws-deployment">2. <strong>AWS Deployment</strong>:</h4>
-<p>Next, I explored hosting the project on <strong>AWS</strong>. AWS provides various services like <strong>EC2</strong> for backend hosting and <strong>RDS</strong> for database hosting, along with other services for deploying full-stack applications.</p>
+<hr />
+<h4 id="2-aws-deployment"><strong>2. AWS Deployment</strong></h4>
+<p>Next, I explored <strong>AWS</strong>, leveraging its robust suite of services like <strong>EC2</strong> for backend hosting and <strong>RDS</strong> for database management.</p>
 <ul>
-<li><strong>Issue</strong>: While AWS does support both backend and database hosting, the costs involved were a significant concern. AWS services, particularly for hosting a <strong>PostgreSQL</strong> database along with backend services, require a paid plan, which was beyond the budget for this project.</li>
-<li><strong>Result</strong>: Due to the costs associated with AWS, I could not proceed with the deployment of the full-stack application on this platform. I needed a more affordable solution that would accommodate both backend and database hosting.</li>
+<li><strong>Issue</strong>: While AWS offers comprehensive solutions for full-stack applications, including backend and database hosting, the associated costs were beyond the budget of this project. Particularly, hosting a <strong>PostgreSQL</strong> database and backend services required a paid plan.</li>
+<li><strong>Outcome</strong>: I couldn't proceed with AWS due to the costs involved.</li>
 </ul>
-<h4 id="3-github-pages">3. <strong>GitHub Pages</strong>:</h4>
-<p>I also considered using <strong>GitHub Pages</strong>, a free service provided by GitHub for hosting static websites. GitHub Pages is designed for frontend applications and can host HTML, CSS, and JavaScript files.</p>
+<hr />
+<h4 id="3-azure-deployment"><strong>3. Azure Deployment</strong></h4>
+<p>I also considered deploying the project on <strong>Microsoft Azure</strong>, a cloud platform with similar offerings to AWS.</p>
 <ul>
-<li><strong>Issue</strong>: GitHub Pages only supports static pages and does not allow for hosting backend services such as Flask applications or managing databases. As my weather app was a <strong>full-stack</strong> project with both frontend and backend components (Flask app and PostgreSQL), this platform could not accommodate the dynamic server-side code and database storage.</li>
-<li><strong>Result</strong>: Since GitHub Pages only supports static content, it was not a viable option for hosting the full-stack Flask app with dynamic backend processing and database storage.</li>
+<li><strong>Issue</strong>: Hosting the Flask app and PostgreSQL database on Azure incurred costs, which were a significant constraint for this project. As a result, I was unable to deploy the application on Azure.</li>
+<li><strong>Outcome</strong>: The deployment on Azure was not feasible due to budget limitations.</li>
 </ul>
-<h4 id="4-final-resolution-github-repository-hosting">4. <strong>Final Resolution</strong>: GitHub Repository Hosting</h4>
-<p>After exploring multiple options, I finally settled on <strong>uploading the project code to GitHub</strong>. While the app could not be hosted live in a production environment, I chose to showcase the project by making the complete source code available on GitHub for review and further development.</p>
+<hr />
+<h4 id="4-github-pages"><strong>4. GitHub Pages</strong></h4>
+<p>Since GitHub Pages provides free hosting for static websites, I explored hosting the frontend or documentation site there.</p>
 <ul>
-<li><strong>Reasoning</strong>: By uploading the project to GitHub, I could still share the project with others, provide access to the code for learning purposes, and allow for potential collaboration or improvements. Although the app could not be hosted live due to database restrictions on free hosting platforms, GitHub provided a great alternative for storing and sharing the code.</li>
+<li><strong>Issue</strong>: GitHub Pages does not support backend services or dynamic content, making it unsuitable for the full-stack Flask application.</li>
+<li><strong>Outcome</strong>: GitHub Pages was used to host the <strong>static documentation</strong> of the project successfully.</li>
 </ul>
-<h3 id="conclusion">Conclusion:</h3>
-<p>In summary, during the deployment phase of my Flask-based <strong>Weather Data Management Web Application</strong>, I faced multiple challenges regarding platform compatibility, database integration, and budget constraints. The key platforms I explored—Vercel, AWS, and GitHub Pages—each had their limitations:</p>
+<hr />
+<h4 id="final-resolution"><strong>Final Resolution</strong></h4>
+<p>Given the challenges of hosting the full-stack app, I decided to:</p>
+<ol>
+<li><strong>Upload the source code to GitHub</strong>:  </li>
+<li>This allows others to review, learn from, and collaborate on the project.  </li>
+<li>
+<p>The app itself couldn't be hosted live due to database restrictions and platform constraints.</p>
+</li>
+<li>
+<p><strong>Host the project documentation on GitHub Pages</strong>:  </p>
+</li>
+<li>The static documentation was successfully hosted on <strong>GitHub Pages</strong> and linked to a custom domain I purchased:<br />
+<strong><a href="https://nitkarshchourasia.me">nitkarshchourasia.me</a></strong>.</li>
+</ol>
+<hr />
+<h3 id="conclusion"><strong>Conclusion</strong></h3>
+<p>In summary, deploying the Flask-based <strong>Weather Data Management Web Application</strong> involved navigating platform limitations, database integration issues, and budget constraints. Key observations include:</p>
 <ul>
-<li><strong>Vercel</strong>: Free tier did not support PostgreSQL database.</li>
-<li><strong>AWS</strong>: Required paid services for backend and database hosting.</li>
-<li><strong>GitHub Pages</strong>: Could only host static content, not dynamic Flask applications.</li>
+<li><strong>Vercel</strong>: Free tier lacked support for PostgreSQL.  </li>
+<li><strong>AWS and Azure</strong>: Reliable but costly for backend and database hosting.  </li>
+<li><strong>GitHub Pages</strong>: Ideal for static content but unsuitable for the dynamic app.</li>
 </ul>
-<p>Ultimately, I decided to <strong>upload the project code to GitHub</strong> as a solution, enabling others to access the source code and make use of the project while bypassing the hosting issues encountered.</p>
+<p>Ultimately, I hosted the <strong>documentation site</strong> successfully on GitHub Pages, linked to my custom domain, while making the project’s <strong>source code available on GitHub</strong> for accessibility and collaboration.</p>
 
 
 
@@ -1026,8 +1056,8 @@
   
   
     Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
+    <a href="https://www.linkedin.com/in/nitkarshchourasia/" target="_blank" rel="noopener">
+      ❤️ Nitkarsh Chourasia
     </a>
   
 </div>
