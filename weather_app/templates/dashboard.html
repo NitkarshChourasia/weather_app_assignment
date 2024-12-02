@@ -16,53 +16,29 @@
     </header>
 
     <main>
-        <section class="card">
-            <div class="search">
-                <input id="search-input" type="text" placeholder="Enter name of the place" spellcheck="false" aria-label="Search location">
-                <button id="search-btn">
-                    <img src="{{ url_for('static', filename='images/search.png') }}" alt="Search">
-                </button>
-            </div>
 
-            <div class="error">
-                <p>Invalid city name. Please try again.</p>
-            </div>
-
-            <div class="weather">
-                <!-- Dynamically setting the weather icon based on backend response -->
-                <h1 class="temp">{{ temp }}°C</h1>
-                <h2 class="city">{{ city_name }}</h2>
-                <p class="weather-condition">{{ weather_condition }} - {{ weather_description }}</p>
-                <div class="details">
-                    <div class="col">
-                        <img src="{{ url_for('static', filename='images/humidity.png') }}" alt="Humidity">
-                        <div>
-                            <p class="humidity">{{ humidity }}%</p>
-                            <p class="text">Humidity</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <img src="{{ url_for('static', filename='images/wind.png') }}" alt="Wind Speed">
-                        <div>
-                            <p class="wind">{{ wind_speed }} km/hr</p>
-                            <p class="text">Wind Speed</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="log-weather">
-            <input id="place-input" type="text" placeholder="Log another place" spellcheck="false" aria-label="Log location">
-            <button id="log-btn">
-                <img id="log_image" src="{{ url_for('static', filename='images/log_icon.png') }}" alt="Log Icon">
-            </button>
-        </section>
+        <div>
+            <label for="city">Enter city:</label>
+            <input type="text" id="city" placeholder="e.g., London">
+            <button id="search-btn">Get Weather</button>
+        </div>
+        <div id="weather-info">
+            <p id="info-title">Weather Information will appear here.</p>
+            <p id="country-name"></p>
+            <p id="city-name"></p>
+            <p id="weather-condition"></p>
+            <p id="temperature"></p>
+            <p id="pressure"></p>
+            <p id="humidity"></p>
+            <p id="wind-speed"></p>
+            <p id="wind-degree"></p>
+        </div>
     </main>
 
     <footer>
         <p>&copy; 2024 WeatherX Pro. All Rights Reserved.</p>
     </footer>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/dashboard.js') }}"></script>
 </body>
 
 </html>
