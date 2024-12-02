@@ -1,7 +1,6 @@
 """
 This module initializes the Flask application and sets up routes for the weather app.
 """
-
 import json
 import re  # to use regex for password validation
 import os
@@ -21,6 +20,7 @@ from flask_wtf.csrf import CSRFProtect
 from secret_key_generator import generate_secret_key
 from models import db, WeatherLog
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 
 # Load environment variables from .env
@@ -28,6 +28,7 @@ load_dotenv()
 
 # Initialize the Flask app
 app = Flask(__name__)
+CORS(app)
 
 
 def setup_logging():
@@ -268,9 +269,19 @@ def fetch_weather_data():
         app.logger.warning("City parameter is missing in weather fetch request")
         return jsonify({"error": "City parameter is required"}), 400
 
-    api_key1 = os.getenv("OPENWEATHER_API_KEY")
-    api_key2 = os.getenv("OPENWEATHER_API_KEY1")
-    api_key = random.choice([api_key1, api_key2])
+ # Fetch API keys from environment variables
+    api_keys = [os.getenv("OPENWEATHER_API_KEY"), os.getenv("OPENWEATHER_API_KEY1")]
+    api_keys = [key for key in api_keys if key]  # Filter out None values
+
+# Can add an alternator to switch between keys using true and false values
+    if not api_keys:
+        app.logger.error("No API keys found in environment variables")
+        return jsonify({"error": "Server configuration error: API keys are missing"}), 500 
+
+    api_key = random.choice(api_keys)
+    #TODO: This is good but what if the api requests sent gives error for the whole request?
+    # It should try again then with individual keys two times more
+    # Implement this logic too, here
 
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&APPID={api_key}&units=metric"
     response = requests.get(url)
@@ -278,39 +289,16 @@ def fetch_weather_data():
     if response.status_code == 200:
         data = response.json()
 
-        weather_condition = data["weather"][0]["main"]
-        weather_description = data["weather"][0]["description"]
-        city_name = data["name"]
-        temp = round(data["main"]["temp"])
-        humidity = data["main"]["humidity"]
-        wind_speed = data["wind"]["speed"]
-
-        # Mapping OpenWeather icons to your own images
-        icon_map = {
-            "Clouds": "clouds.png",
-            "Clear": "clear.png",
-            "Rain": "rain.png",
-            "Drizzle": "drizzle.png",
-            "Mist": "mist.png",
-            "Snow": "snow.png",
-            "Thunderstorm": "thunder.png",
-            "Smoke": "smoke.png",  # Add new icon for "smoke"
-            "Haze": "haze.png",    # Example: Haze condition
-            # Add more mappings if needed
-        }
-
-        # Default icon if no match found
-        weather_icon_path = icon_map.get(weather_condition, "search.png")
-
-        # Pass weather data to the template
-        return render_template("weather.html", 
-                               city_name=city_name, 
-                               weather_condition=weather_condition, 
-                               weather_description=weather_description,
-                               temp=temp, 
-                               humidity=humidity, 
-                               wind_speed=wind_speed)
-    
+        return jsonify({
+            "country_name" : data["sys"]["country"], 
+            "city_name" : data["name"],
+            "weather_condition" : data["weather"][0]["main"],
+            "temp": round(data["main"]["temp"], 2),
+            "pressure": data["main"]["pressure"],
+            "humidity": data["main"]["humidity"],
+            "wind_speed": data["wind"]["speed"],
+            "wind_degree": data["wind"]["deg"]
+        })
     else:
         return jsonify({"error": "City not found"}), response.status_code
     
