@@ -1,4 +1,5 @@
 const button = document.getElementById("search-btn");
+document.getElementById("weather-info").style.display = "none";
 
 button.addEventListener("click", async () => {
 
@@ -25,13 +26,14 @@ async function checkWeather(city) {
 
         // Correctly updating DOM elements with the fetched data
         document.getElementById("country-name").textContent = data.country_name;
-        document.getElementById("city-name").textContent = `Weather in ${data.city_name}`;
+        document.getElementById("city-name").textContent = data.city_name;
         document.getElementById("weather-condition").textContent = data.weather_condition;
         document.getElementById("temperature").textContent = `${data.temp}°C`;
         document.getElementById("pressure").textContent = `${data.pressure} hPa`;
         document.getElementById("humidity").textContent = `${data.humidity}%`;
         document.getElementById("wind-speed").textContent = `${data.wind_speed} m/s`;
         document.getElementById("wind-degree").textContent = `${data.wind_degree}°`;
+        document.getElementById("weather-info").style.display = "block";
 
     } catch (error) {
         console.error("Error:", error);
