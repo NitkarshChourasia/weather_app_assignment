@@ -260,7 +260,7 @@ def home():
 
 
 # Utility function to fetch weather data from OpenWeather API
-# @login_required_check
+@login_required_check
 @app.route("/weather", methods=["GET"])
 def fetch_weather_data():
     city = request.args.get("city")
@@ -314,7 +314,7 @@ logs = []
 
 
 # Log weather data route
-# @login_required_check
+@login_required_check
 @app.route("/add_log_weather", methods=["POST", "GET"])
 def add_log_weather():
     try:
@@ -401,6 +401,7 @@ def clear_logs():
 
 # Delete weather log route (integrated with both DB and in-memory logs)
 @app.route("/delete_log/<log_id>", methods=["POST"])
+
 def delete_log(log_id):
     # If using a database
     log = weather_db.query.get_or_404(log_id)
@@ -441,11 +442,12 @@ def logout():
 @app.route("/debug_session")
 @login_required_check
 def debug_session():
+    global username
     session_id = request.cookies.get("session")
     print(f"Session ID: {session_id}")
     app.logger.info(f"Session data {session}")
     print(f"Session data: {session}")
-    print(f"Session username: {session["username"]}")
+    print(f"Session username: {user_name}")
     print(WeatherData.__table__)
     print(app.secret_key)
     return "Check the console for session data"
