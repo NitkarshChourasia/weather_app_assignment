@@ -14,6 +14,23 @@ button.addEventListener("click", async () => {
     // Display the input in the result div
 });
 
+const add_log = document.getElementById("log-btn");
+add_log.addEventListener("click", async () => {
+    const log_city = document.getElementById('city').value.trim();
+    if (!log_city) {
+        alert("Please enter a city name");
+    } else {
+        postLog(log_city);
+    }
+})
+
+async function postLog(city) {
+    const response = await fetch(`http://127.0.0.1:5000/add_log_weather?city=${city}`);
+alert("Log added successfully");
+    console.log(`Response status: ${response.status}`);
+}
+
+
 async function checkWeather(city) {
     try {
         const response = await fetch(`http://127.0.0.1:5000/weather?city=${city}`);

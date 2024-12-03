@@ -125,3 +125,13 @@ footer {
   font-weight: bold;
   color: #03a895;
 }
+
+#log-btn {
+    background-color: rgb(235, 211, 77);
+    color: black;
+    font-weight: bolder;
+    font-size: 1.2rem;
+}
+#search-btn {
+    font-size: 1.2rem;
+}
