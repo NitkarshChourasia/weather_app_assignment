@@ -2,17 +2,27 @@ const button = document.getElementById("search-btn");
 document.getElementById("weather-info").style.display = "none";
 
 
-
+let weatherInterval;
 
 button.addEventListener("click", async () => {
 
     // Get the value of the input field
+    let counter = 0;
     const input = document.getElementById('city').value.trim();
     if (!input) {
         alert("Please enter a city name");
     } else {
 
-        checkWeather(input);
+        if (weatherInterval) {
+            clearInterval(weatherInterval);
+        }
+        weatherInterval = setInterval(() => {
+            counter++;
+            console.log(`Counter: ${counter}`);
+            checkWeather(input);
+        }, 2000);
+
+        // checkWeather(input);
     }
     // Display the input in the result div
 });
