@@ -127,11 +127,17 @@ footer {
 }
 
 #log-btn {
-    background-color: rgb(235, 211, 77);
-    color: black;
-    font-weight: bolder;
-    font-size: 1.2rem;
+  background-color: rgb(235, 211, 77);
+  color: black;
+  font-weight: bolder;
+  font-size: 1.2rem;
 }
 #search-btn {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
+}
+
+#log-message {
+  display: none;
+  opacity: 0;
+  transition: opacity 1s;
 }

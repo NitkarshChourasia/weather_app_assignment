@@ -1,6 +1,9 @@
 const button = document.getElementById("search-btn");
 document.getElementById("weather-info").style.display = "none";
 
+
+
+
 button.addEventListener("click", async () => {
 
     // Get the value of the input field
@@ -25,9 +28,33 @@ add_log.addEventListener("click", async () => {
 })
 
 async function postLog(city) {
+
+    showText();
     const response = await fetch(`http://127.0.0.1:5000/add_log_weather?city=${city}`);
-alert("Log added successfully");
+    // alert("Log added successfully");
     console.log(`Response status: ${response.status}`);
+    function showText() {
+
+        const messageElement = document.getElementById("log-message");
+        messageElement.style.display = 'block'; // Show the message
+
+        // Force reflow to ensure the display change is registered
+        messageElement.offsetHeight; // This forces a reflow
+
+        // Fade the message in by changing opacity to 1
+        messageElement.style.opacity = '1';
+
+        // Set a timer to start fading out after 2 seconds
+        setTimeout(function () {
+            messageElement.style.opacity = '0'; // Start fading out
+        }, 1000);
+
+        // Set another timer to hide the message after the fade-out is complete
+        setTimeout(function () {
+            messageElement.style.display = 'none'; // Hide the message after fade-out
+        }, 2000); // 1 seconds for fading in + 1 seconds for fading out
+    }
+
 }
 
 
