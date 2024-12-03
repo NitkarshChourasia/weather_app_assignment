@@ -13,9 +13,9 @@
     <header class="text-center p-6">
         <h1 class="text-4xl font-extrabold text-shadow-lg">🌦 WeatherX Pro</h1>
         <div class="mt-4">
-            <a class="inline-block px-6 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-400 transition"
+            <a class="inline-block px-6 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-400 transition logout-button"
                 href="{{ url_for('logout') }}">Logout</a>
-            <a class="inline-block px-6 py-2 bg-teal-400 text-black font-semibold rounded-lg shadow-md hover:bg-teal-300 transition ml-4"
+            <a class="inline-block px-6 py-2 bg-teal-400 text-black font-semibold rounded-lg shadow-md hover:bg-teal-300 transition ml-4 weather-logs-button"
                 href="{{ url_for('weather_logs_list') }}">Weather Logs</a>
         </div>
     </header>
@@ -35,7 +35,6 @@
 
         <!-- Weather Info Section -->
         <div id="weather-info" class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
-            <p id="info-title" class="text-xl text-center text-gray-600">Weather Information will appear here.</p>
             <p class="mt-4 text-lg text-center text-gray-700">
                 <span class="info-label">Country:</span> <span id="country-name" class="info-value">IN</span>
             </p>
