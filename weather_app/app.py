@@ -139,7 +139,7 @@ def write_users_to_json(users):
     with open("data/users.json", "w") as f:
         json.dump({"users": users}, f, indent=4)
 
-
+global user_name
 # Login route
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -156,6 +156,8 @@ def login():
                 user["password"], password
             ):
                 session["username"] = username
+                global user_name
+                user_name = session["username"]  # to use in the weather log
                 print(f"session username: {session['username']}")
                 return redirect("/dashboard")  # Redirect after successful login
 
@@ -258,7 +260,7 @@ def home():
 
 
 # Utility function to fetch weather data from OpenWeather API
-@login_required_check
+# @login_required_check
 @app.route("/weather", methods=["GET"])
 def fetch_weather_data():
     city = request.args.get("city")
@@ -312,7 +314,7 @@ logs = []
 
 
 # Log weather data route
-@login_required_check
+# @login_required_check
 @app.route("/add_log_weather", methods=["POST", "GET"])
 def add_log_weather():
     try:
@@ -320,7 +322,8 @@ def add_log_weather():
         data = fetch_weather_data().json
         print(data)
         print("username hai idhar")
-        print(session.get("username"))
+        global user_name
+        print(user_name)
         app.logger.info(f"Recieved data: {data}")
 
         # Validate required keys
@@ -342,9 +345,11 @@ def add_log_weather():
         # Extract data
 
         # Create a new WeatherData object
+        print(f"username hai idhar bhi {user_name}")
         new_log = WeatherData(
             # username=session.get("username"),
-            username="Nitkarsh",
+            # username="Nitkarsh",
+            username=user_name,
             country_name=data["country_name"],
             city_name=data["city_name"],
             weather_condition=data["weather_condition"],
@@ -440,7 +445,7 @@ def debug_session():
     print(f"Session ID: {session_id}")
     app.logger.info(f"Session data {session}")
     print(f"Session data: {session}")
-    print(f"Session username: {session.get('username')}")
+    print(f"Session username: {session["username"]}")
     print(WeatherData.__table__)
     print(app.secret_key)
     return "Check the console for session data"
