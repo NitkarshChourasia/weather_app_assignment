@@ -1,6 +1,7 @@
 """
 This module initializes the Flask application and sets up routes for the weather app.
 """
+
 import json
 import re  # to use regex for password validation
 import os
@@ -13,12 +14,11 @@ from datetime import datetime, timezone
 import requests
 from flask import Flask, render_template, request, redirect, session, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
 from dotenv import load_dotenv
 from flask_bcrypt import Bcrypt
 from flask_wtf.csrf import CSRFProtect
 from secret_key_generator import generate_secret_key
-from models import db, WeatherLog
+from models import db, WeatherData
 from flask_migrate import Migrate
 from flask_cors import CORS
 
@@ -83,7 +83,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=99)
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['SQLALCHEMY_ECHO'] = True
+app.config["SQLALCHEMY_ECHO"] = True
 
 db = SQLAlchemy(app)
 
@@ -91,12 +91,11 @@ migrate = Migrate(app, db)
 with app.app_context():
     try:
         db.create_all()
-        # WeatherLog.__table__.create(db.engine)
+        WeatherData.__table__.create(db.engine)
         app.logger.info("Tables created successfully.")
     except Exception as e:
-        WeatherLog.__table__.create(db.engine)
         app.logger.error(f"Error creating tables: {e}")
-        app.logger.info("Tables created successfully by Engine.")
+        app.logger.info("Error thrown successfully.")
 
 
 csrf = CSRFProtect(app)
@@ -157,7 +156,7 @@ def login():
                 user["password"], password
             ):
                 session["username"] = username
-                print(f"session username: {session["username"]}")
+                print(f"session username: {session['username']}")
                 return redirect("/dashboard")  # Redirect after successful login
 
         # Log failed login attempt
@@ -259,98 +258,122 @@ def home():
 
 
 # Utility function to fetch weather data from OpenWeather API
+@login_required_check
 @app.route("/weather", methods=["GET"])
 def fetch_weather_data():
     city = request.args.get("city")
     app.logger.info(f"Fetching weather data for city: {city}")
-    
+
     # Handle missing city parameter
     if not city:
         app.logger.warning("City parameter is missing in weather fetch request")
         return jsonify({"error": "City parameter is required"}), 400
 
- # Fetch API keys from environment variables
+    # Fetch API keys from environment variables
     api_keys = [os.getenv("OPENWEATHER_API_KEY"), os.getenv("OPENWEATHER_API_KEY1")]
     api_keys = [key for key in api_keys if key]  # Filter out None values
 
-# Can add an alternator to switch between keys using true and false values
+    # Can add an alternator to switch between keys using true and false values
     if not api_keys:
         app.logger.error("No API keys found in environment variables")
-        return jsonify({"error": "Server configuration error: API keys are missing"}), 500 
+        return (
+            jsonify({"error": "Server configuration error: API keys are missing"}),
+            500,
+        )
 
     api_key = random.choice(api_keys)
-    #TODO: This is good but what if the api requests sent gives error for the whole request?
+    # TODO: This is good but what if the api requests sent gives error for the whole request?
     # It should try again then with individual keys two times more
     # Implement this logic too, here
 
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&APPID={api_key}&units=metric"
     response = requests.get(url)
-    
+
     if response.status_code == 200:
         data = response.json()
 
-        return jsonify({
-            "country_name" : data["sys"]["country"], 
-            "city_name" : data["name"],
-            "weather_condition" : data["weather"][0]["main"],
-            "temp": round(data["main"]["temp"], 2),
-            "pressure": data["main"]["pressure"],
-            "humidity": data["main"]["humidity"],
-            "wind_speed": data["wind"]["speed"],
-            "wind_degree": data["wind"]["deg"]
-        })
+        return jsonify(
+            {
+                "country_name": data["sys"]["country"],
+                "city_name": data["name"],
+                "weather_condition": data["weather"][0]["main"],
+                "temp": round(data["main"]["temp"], 2),
+                "pressure": data["main"]["pressure"],
+                "humidity": data["main"]["humidity"],
+                "wind_speed": data["wind"]["speed"],
+                "wind_degree": data["wind"]["deg"],
+            }
+        )
     else:
         return jsonify({"error": "City not found"}), response.status_code
-    
+
 
 logs = []
 
+
 # Log weather data route
+@login_required_check
 @app.route("/add_log_weather", methods=["POST", "GET"])
 def add_log_weather():
-    # data = fetch_weather_data()
-    data = request.json
-    app.logger.info(f"Recieved data: {data}")
-    # if not data.get("city"): 
-    #     app.logger.warning(f"Missing city or temperature data in log request by user: {session['username']}")
-    #     return jsonify({"error": "Missing city"}), 400
-# Extract data
-    username = session.get("username")
-    print(username)
-    city = data.get("city")
-    temperature = data.get("temperature")
-    pressure = data.get("pressure")
-    humidity = data.get("humidity")
-    wind_speed = data.get("wind_speed")
-    wind_degree = data.get("wind_degree")
-
-    # Create a new WeatherLog object
-    new_log = WeatherLog(
-        username=username,
-        city=city,
-        temperature=temperature,
-        pressure=pressure,
-        humidity=humidity,
-        wind_speed=wind_speed,
-        wind_degree=wind_degree
-    )
-
-    # Add the new log to the session and commit it to the database
     try:
+        # data = fetch_weather_data()
+        data = fetch_weather_data().json
+        print(data)
+        print("username hai idhar")
+        print(session.get("username"))
+        app.logger.info(f"Recieved data: {data}")
+
+        # Validate required keys
+        required_keys = [
+            "country_name",
+            "city_name",
+            "weather_condition",
+            "temp",
+            "pressure",
+            "humidity",
+            "wind_speed",
+            "wind_degree",
+        ]
+
+        for key in required_keys:
+            if key not in data:
+                raise KeyError(f"Key {key} not found in data")
+
+        # Extract data
+
+        # Create a new WeatherData object
+        new_log = WeatherData(
+            # username=session.get("username"),
+            username="Nitkarsh",
+            country_name=data["country_name"],
+            city_name=data["city_name"],
+            weather_condition=data["weather_condition"],
+            temperature=data["temp"],
+            pressure=data["pressure"],
+            humidity=data["humidity"],
+            wind_speed=data["wind_speed"],
+            wind_degree=data["wind_degree"],
+            timestamp=datetime.now(timezone.utc),
+        )
+
         db.session.add(new_log)
         db.session.commit()
         return jsonify({"message": "Weather log added successfully!"}), 201
+    # Add the new log to the session and commit it to the database
+    except KeyError as e:
+        app.logger.warning(f"Invalid data received: {str(e)}")
+        return jsonify({"error": f"Invalid / Missing data {str(e)}"}), 400
     except Exception as e:
+        db.session.rollback()
         app.logger.error(f"Error saving data to database: {str(e)}")
         return jsonify({"error": "An error occurred while saving the weather log"}), 500
-
 
 
 # View weather logs route
 @app.route("/weather_logs_list")
 @login_required_check
 def weather_logs_list():
-    logs = WeatherLog.query.filter_by(username=session["username"]).all()
+    logs = WeatherData.query.filter_by(username=session["username"]).all()
     return render_template("weather_logs.html", logs=logs, username=session["username"])
 
 
@@ -363,7 +386,7 @@ def clear_logs():
 
     try:
         # Delete logs for the logged-in user only
-        WeatherLog.query.filter_by(user_id=user_id).delete()
+        WeatherData.query.filter_by(user_id=user_id).delete()
         db.session.commit()
         return jsonify({"success": True, "message": "All logs cleared for user"}), 200
     except Exception as e:
@@ -409,18 +432,18 @@ def logout():
 #     app.logger.warning(f"404 Error: {error}")
 #     return jsonify({"error": "Not found"}), 404
 
-@login_required_check
+
 @app.route("/debug_session")
+@login_required_check
 def debug_session():
     session_id = request.cookies.get("session")
     print(f"Session ID: {session_id}")
-    app.logger.info(f"Session data {session}" )
+    app.logger.info(f"Session data {session}")
     print(f"Session data: {session}")
     print(f"Session username: {session.get('username')}")
-    print(WeatherLog.__table__)
-    print(app.secret_key) 
+    print(WeatherData.__table__)
+    print(app.secret_key)
     return "Check the console for session data"
-
 
 
 if __name__ == "__main__":
