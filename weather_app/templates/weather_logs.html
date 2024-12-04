@@ -18,7 +18,16 @@
         <!-- Weather Logs Table -->
         <div class="table-container">
             <meta name="csrf-token" content="{{ csrf_token() }}">
-            <button id="clear-logs-button" class="btn-danger">Clear All Logs</button>
+            <button id="clear-all-logs-btn" class="btn-danger">Clear All Logs</button>
+            <!-- Confirmation Modal -->
+            <div id="confirmation-modal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <p>Are you sure you want to clear all logs?</p>
+                    <button class="btn-confirm" id="confirm-clear-button">Yes, Clear All</button>
+                    <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                </div>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -64,20 +73,7 @@
             </table>
         </div>
 
-        <!-- Confirmation Modal -->
-        <div id="confirmation-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <p>Are you sure you want to clear all logs?</p>
-                <button class="btn-confirm" id="confirm-clear-button">Yes, Clear All</button>
-                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-
-
-    <script type="text/javascript" src="{{ url_for('static', filename='scripts/weather_logs.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='scripts/weather_logs.js') }}"></script>
 </body>
 
 </html>

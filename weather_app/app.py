@@ -490,7 +490,6 @@ def delete_log(log_id):
     log = WeatherData.query.get_or_404(log_id)
     print(type(log))
 
-    global user_name
     if log.username != session.get("username"):
         app.logger.warning(
             f"Unauthorized deletion attempt for log id: {log_id} by user: {session.get('username')}"
@@ -526,6 +525,59 @@ def delete_log(log_id):
         )
 
     return jsonify({"status": "success", "message": "Log deleted successfully"}), 200
+
+
+@app.route("/delete_all_logs", methods=["POST"])
+def delete_all_logs():
+    # Get the current username from the session
+    username = session.get("username")
+
+    if not username:
+        return jsonify({"status": "error", "message": "User not logged in"}), 401
+
+    try:
+        # Use a custom SQL query to fetch all logs for the current user
+        result = db.session.execute(
+            "SELECT * FROM weather_data WHERE username = :username",
+            {"username": username},
+        )
+
+        # Convert the result to a list (if there are any rows returned)
+        Completelogs = result.fetchall()
+
+        if not Completelogs:
+            return (
+                jsonify({"status": "error", "message": "No logs found for this user"}),
+                404,
+            )
+
+        # Delete all logs for the user
+        for log in Completelogs:
+            db.session.execute(
+                "DELETE FROM weather_data WHERE id = :id", {"id": log.id}
+            )
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        app.logger.info(f"User {username} deleted all weather logs.")
+
+    except Exception as e:
+        # Rollback in case of any error
+        db.session.rollback()
+        app.logger.error(f"Error deleting logs for user {username}: {str(e)}")
+
+        return (
+            jsonify(
+                {"status": "error", "message": "An error occurred while deleting logs"}
+            ),
+            500,
+        )
+
+    return (
+        jsonify({"status": "success", "message": "All logs deleted successfully"}),
+        200,
+    )
 
 
 # Logout route

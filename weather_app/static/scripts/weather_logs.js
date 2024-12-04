@@ -81,3 +81,50 @@ function deleteLog(log_id) {
 function toggleNightMode() {
     document.body.classList.toggle("night-mode");
 }
+
+// http://127.0.0.1:5000/add_log_weather?
+
+document.getElementById("confirm-clear-button").addEventListener("click", () => {
+    clearAllLogs(); // Function to clear all logs
+    closeModal(); // Hide the modal after confirmation
+});
+
+// Event listener for Clear All Logs button
+document.getElementById("clear-all-logs-btn").addEventListener("click", () => {
+    document.getElementById("confirmation-modal").style.display = "block";
+});
+
+// Event listener for confirming clearing all logs
+document.getElementById("confirm-clear-button").addEventListener("click", () => {
+    clearAllLogs(); // Function to clear all logs
+    closeModal(); // Hide the modal after confirmation
+});
+
+
+// Close the modal
+function closeModal() {
+    document.getElementById("confirmation-modal").style.display = "none";
+}
+
+
+// Function to clear all logs
+function clearAllLogs() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    fetch(`http://127.0.0.1:5000/delete_all_logs`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                location.reload(); // Reload the page after successful deletion of all logs
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
