@@ -139,7 +139,10 @@ def write_users_to_json(users):
     with open("data/users.json", "w") as f:
         json.dump({"users": users}, f, indent=4)
 
+
 global user_name
+
+
 # Login route
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -396,26 +399,136 @@ def clear_logs():
         return jsonify({"success": True, "message": "All logs cleared for user"}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({"success": False, "error": str(e)}), 500
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "error": "An unexpected error occured. Please try again later.",
+                }
+            ),
+            500,
+        )
 
 
 # Delete weather log route (integrated with both DB and in-memory logs)
-@app.route("/delete_log/<log_id>", methods=["POST"])
+# @login_required_check
+# @app.route("/delete_log/<log_id>", methods=["DELETE", "POST"])
+# def delete_log(log_id):
+#     # Get the log from the database or return 404 if not found
+#     log = WeatherData.query.get(log_id)
+#     # global user_name
+#     # Check if the logged-in user matches the log's user
+#     # print(f"log username {log.username}")
+#     # print(f"session username: {session.get('username')}")
+#     # print(f"user_name: {user_name}")
+#     # if log.username != user_name:
+#     #     app.logger.warning(
+#     #         f"Unauthorized deletion attempt for log id: {log_id} by user: {session.get('username')}"
+#     #     )
+#     #     return jsonify({"status": "error", "message": "Forbidden"}), 403
 
+#     # try:
+#     # Delete the log and commit the change
+#     # db.session.delete(log)
+#     # db.session.commit()
+#     #     app.logger.info(
+#     #         f"User {session.get('username')} deleted weather log with id: {log_id}"
+#     #     )
+#     # except Exception as e:
+#     #     # If an error occurs, rollback and log the error
+#     #     db.session.rollback()
+#     #     app.logger.error(f"Error deleting log: {log_id}, Exception: {str(e)}")
+#     #     return (
+#     #         jsonify(
+#     #             {
+#     #                 "status": "error",
+#     #                 "message": "An error occurred while deleting the log",
+#     #             }
+#     #         ),
+#     #         500,
+#     #     )
+
+#     # Return a success message if the deletion was successful
+#     # return jsonify({"status": "success", "message": "Log deleted successfully"}), 200
+#     try:
+#         result = WeatherData.query.filter_by(
+#             id=log_id, username=session.get("username")
+#         ).delete()
+#         db.session.commit()
+#         if result == 0:
+#             return (
+#                 jsonify({"status": "error", "message": "Log not found or forbidden"}),
+#                 404,
+#             )
+
+#         app.logger.info(
+#             f"User {session.get('username')} deleted weather log with id: {log_id}"
+#         )
+#         return (
+#             jsonify({"status": "success", "message": "Log deleted successfully"}),
+#             200,
+#         )
+
+#     except Exception as e:
+#         db.session.rollback()
+#         app.logger.error(f"Error deleting log: {e}")
+#         return (
+#             jsonify(
+#                 {
+#                     "status": "error",
+#                     "message": "An error occurred while deleting the log",
+#                 }
+#             ),
+#             500,
+#
+
+# Only if you're manually handling CSRF protection
+
+
+@app.route("/delete_log/<log_id>", methods=["POST"])
+# @csrf_exempt  # Only if necessary, if using flask-csrf or manually
 def delete_log(log_id):
-    # If using a database
-    log = weather_db.query.get_or_404(log_id)
+
+    log_id = int(log_id)
+
+    log = WeatherData.query.get_or_404(log_id)
+    print(type(log))
+
+    global user_name
     if log.username != session.get("username"):
         app.logger.warning(
             f"Unauthorized deletion attempt for log id: {log_id} by user: {session.get('username')}"
         )
         return jsonify({"status": "error", "message": "Forbidden"}), 403
 
-    db.session.delete(log)
-    db.session.commit()
-    app.logger.info(
-        f"User {session.get('username')} deleted weather log with id: {log_id}"
-    )
+    try:
+        # db.session.delete(log_id)
+        # db.session.execute(
+        #     "SELECT * FROM weather_data WHERE id = :id",
+        #     {"id": log_id},
+        # )
+
+        db.session.execute("DELETE FROM weather_data WHERE id = :id", {"id": log_id})
+        db.session.commit()
+        app.logger.info(
+            f"User {session.get('username')} deleted weather log with id: {log_id}"
+        )
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(
+            f"Error deleting log {log_id}: {str(e)}"
+        )  # Log the exception message
+
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "An error occurred while deleting the log",
+                }
+            ),
+            500,
+        )
+
     return jsonify({"status": "success", "message": "Log deleted successfully"}), 200
 
 

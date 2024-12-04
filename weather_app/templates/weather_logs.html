@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Logs</title>
+    <title>Weather Logs - {{username}}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/weather_logs.css') }}">
 </head>
 
@@ -17,30 +17,38 @@
 
         <!-- Weather Logs Table -->
         <div class="table-container">
+            <meta name="csrf-token" content="{{ csrf_token() }}">
             <button id="clear-logs-button" class="btn-danger">Clear All Logs</button>
-            <div id="loading" class="loading">Loading...</div>
             <table>
                 <thead>
                     <tr>
+                        <th>Country</th>
                         <th>City</th>
+                        <th>Weather Condition</th>
                         <th>Temperature</th>
-                        <th>Timestamp</th>
-                        <th>Actions</th>
+                        <th>Pressure</th>
+                        <th>Humidity</th>
+                        <th>Wind Speed</th>
+                        <th>Wind Degree</th>
+                        <th>Time Logged</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for log in logs %}
+                    <!-- Put appropriate symbol here -->
                     <tr id="{{ log.id }}">
-                        <td>{{ log.id }}</td>
-                        <td>{{ log.city }}</td>
-                        <td>{{ log.temperature }} °C</td>
-                        <td>{{ log.pressure}} °C</td>
+                        <td>{{ log.country_name }}</td>
+                        <td>{{ log.city_name }} °C</td>
+                        <td>{{ log.weather_condition}} °C</td>
+                        <td>{{ log.temperature}} °C</td>
                         <td>{{ log.humidity}} °C</td>
                         <td>{{ log.wind_speed}} °C</td>
-                        <td>{{ log.wind_degree}} °C</td>
-                        <td>{{ log.timestamp }}</td>
+                        <td>{{ log.wind_degree }}</td>
+                        <td>{{ log.wind_degree }}</td>
+                        <td>{{ log.timestamp}}</td>
                         <td>
-                            <button onclick="deleteLog({{ log.id }})" class="btn-delete">Delete</button>
+                            <button data-log-id="{{ log.id }}" class="btn-delete">Delete</button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -59,82 +67,9 @@
         </div>
     </div>
 
-    <script>
-        function toggleNightMode() {
-            document.body.classList.toggle("night-mode");
-        }
 
-function deleteLog(logId, retries = 3) {
-    fetch(`/delete_log/${logId}`, {
-        method: 'POST',
-    })
-    .then(response => {
-        if (response.status === 200) {
-            return response.json();  // Process JSON only if status is 200
-        } else {
-            throw new Error(`Failed to delete log, server returned status ${response.status}`);
-        }
-    })
-    .then(data => {
-        if (data.status === "success" && data.message === "Log deleted successfully") {
-            alert(data.message);  // Success message
-            document.getElementById(`${logId}`).remove();  // Remove the log from the UI
-        } else {
-            alert('Failed to delete log: ' + data.message);  // Error message from server
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        if (retries > 0) {
-            console.log(`Retrying... ${retries} attempts left.`);
-            deleteLog(logId, retries - 1);  // Retry the deletion if attempts left
-        } else {
-            alert('Error deleting log after multiple attempts');  // Final failure message
-        }
-    });
-}
 
-        document.getElementById("clear-logs-button").addEventListener("click", function () {
-            document.getElementById("confirmation-modal").style.display = "block";
-        });
-
-        function closeModal() {
-            document.getElementById("confirmation-modal").style.display = "none";
-        }
-
-        document.getElementById("confirm-clear-button").addEventListener("click", function () {
-            document.getElementById("clear-logs-button").disabled = true;
-            document.getElementById("loading").style.display = "block";
-
-            fetch('/clear-logs', {
-                method: 'POST',
-            })
-                .then(response => {
-                    if (response.status !== 200) {
-                        throw new Error(`Failed to clear logs, server returned status ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    document.getElementById("loading").style.display = "none";
-                    if (data.success) {
-                        document.getElementById("clear-logs-button").disabled = false;
-                        document.querySelector("table").style.display = 'none';
-                        alert("All logs have been cleared.");
-                    } else {
-                        alert("Failed to clear logs.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error clearing logs:", error);
-                    alert("An error occurred while clearing logs.");
-                    document.getElementById("loading").style.display = "none";
-                    document.getElementById("clear-logs-button").disabled = false;
-                });
-
-            closeModal();
-        });
-    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/weather_logs.js') }}"></script>
 </body>
 
 </html>
