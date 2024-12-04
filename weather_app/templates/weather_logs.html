@@ -38,15 +38,23 @@
                     {% for log in logs %}
                     <!-- Put appropriate symbol here -->
                     <tr id="{{ log.id }}">
-                        <td>{{ log.country_name }}</td>
+                        <!-- <td>{{ log.country_name }}</td>
                         <td>{{ log.city_name }} °C</td>
                         <td>{{ log.weather_condition}} °C</td>
                         <td>{{ log.temperature}} °C</td>
                         <td>{{ log.humidity}} °C</td>
                         <td>{{ log.wind_speed}} °C</td>
                         <td>{{ log.wind_degree }}</td>
-                        <td>{{ log.wind_degree }}</td>
-                        <td>{{ log.timestamp}}</td>
+                        <td>{{ log.timestamp}}</td> -->
+                        <td>{{ log.country_name }}</td>
+                        <td>{{ log.city_name }}</td>
+                        <td>{{ log.weather_condition }}</td>
+                        <td>{{ log.temperature }} °C</td>
+                        <td>{{ log.pressure }} hPa</td>
+                        <td>{{ log.humidity }} %</td>
+                        <td>{{ log.wind_speed }} m/s</td>
+                        <td>{{ log.wind_degree }} °</td>
+                        <td>{{ log.timestamp }}</td>
                         <td>
                             <button data-log-id="{{ log.id }}" class="btn-delete">Delete</button>
                         </td>
