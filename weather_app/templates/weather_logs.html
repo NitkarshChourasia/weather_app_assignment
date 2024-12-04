@@ -14,10 +14,14 @@
             <h1>Weather Logs - {{ username }}</h1>
             <button id="night-mode-toggle" onclick="toggleNightMode()">🌙 Night Mode</button>
         </header>
-
         <!-- Weather Logs Table -->
         <div class="table-container">
             <meta name="csrf-token" content="{{ csrf_token() }}">
+
+            <div class="dashboard-link-outer">
+                <a href="{{ url_for('home') }}" id="dashboard-btn" class="dashboard-link-main">Dashboard</a>
+            </div>
+
             <button id="clear-all-logs-btn" class="btn-danger">Clear All Logs</button>
             <!-- Confirmation Modal -->
             <div id="confirmation-modal" class="modal" style="display:none;">
@@ -28,6 +32,7 @@
                     <button class="btn-cancel" onclick="closeModal()">Cancel</button>
                 </div>
             </div>
+
             <table>
                 <thead>
                     <tr>
