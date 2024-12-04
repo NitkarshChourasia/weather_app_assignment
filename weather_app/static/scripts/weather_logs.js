@@ -76,3 +76,8 @@ function deleteLog(log_id) {
     //             console.error('Error:', error);
     //         });
 }
+
+
+function toggleNightMode() {
+    document.body.classList.toggle("night-mode");
+}
