@@ -1,7 +1,3 @@
-"""
-This module initializes the Flask application and sets up routes for the weather app.
-"""
-
 import json
 import re  # to use regex for password validation
 import os
