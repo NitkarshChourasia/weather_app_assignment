@@ -304,9 +304,9 @@ def login_required_check(func):
     return login_required_wrapper
 
 
+@app.route("/")
 @app.route("/home")
 @app.route("/dashboard")
-@app.route("/")
 @login_required_check
 def home():
     return render_template("dashboard.html")
@@ -668,10 +668,18 @@ def debug_session():
     return "Check the console for session data"
 
 
+@login_required_check
 @app.route("/support")
 def support():
     # Your support page view
     return render_template("support.html")
+
+
+# Route for the About Us page
+@login_required_check
+@app.route("/about_us")
+def about_us():
+    return render_template("about_us.html")
 
 
 if __name__ == "__main__":
