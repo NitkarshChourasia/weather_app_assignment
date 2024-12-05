@@ -11,6 +11,10 @@
         {
             "username": "anmolchourasia05@gmail.com",
             "password": "$2b$12$KDejx7IXUPQ12p8zu1/f..3CeiHG0kBqkveDNpQ0blU/XfctVXATC"
+        },
+        {
+            "username": "admin",
+            "password": "$2b$12$oECJ7u9ST5i32SGh8j7lMuqYxYDpLlIilli58o49RQqC1dR.xpZhS"
         }
     ]
 }
