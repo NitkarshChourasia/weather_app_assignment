@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Logs - {{username}}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/weather_logs.css') }}">
+      <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+
 </head>
 
 <body>
@@ -23,6 +25,13 @@
             </div>
 
             <button id="clear-all-logs-btn" class="btn-danger">Clear All Logs</button>
+
+            <div class="mt-4">
+                <a class="inline-block px-6 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-400 transition logout-button"
+                    href="{{ url_for('logout') }}">Logout</a>
+                <a class="inline-block px-6 py-2 bg-teal-400 text-black font-semibold rounded-lg shadow-md hover:bg-teal-300 transition ml-4 weather-logs-button"
+                    href="{{ url_for('weather_logs_list') }}">Weather Logs</a>
+            </div>
             <!-- Confirmation Modal -->
             <div id="confirmation-modal" class="modal" style="display:none;">
                 <div class="modal-content">

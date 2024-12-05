@@ -193,6 +193,25 @@ def is_password_strong(password):
     return True
 
 
+def is_username(username):
+    # Regular expression for a valid username: alphanumeric + optional underscores
+    if (len(username) < 4) or (len(username) > 20):
+        return False
+    pattern = r"^[a-zA-Z0-9_]+$"
+
+    if not re.match(pattern, username):
+        return False
+    return True
+
+
+def handle_bad_request(error):
+    app.logger.warning(f"Bad request: {error}")
+    return render_template("error_400.html", error=str(error)), 400
+
+
+# TODO: CHECK THE 400 PAGE FOR ERROR
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -204,19 +223,34 @@ def register():
         app.logger.info(f"Registration attempt for user: {username}")
 
         # Check if passwords match
+        if not is_username(username):
+            app.logger.warning(f"Invalid username: {username}")
+            error = "Invalid username. Please use only alphanumeric characters and underscores."
+
+            return render_template("error_400.html", error=error)
+            # return (
+            #     "Invalid username. Please use only alphanumeric characters and underscores.",
+            #     400,
+            # )
+
         if password != confirm_password:
             app.logger.warning(f"Passwords do not match for user: {username}")
-            return "Passwords do not match. Please try again.", 400
+            error = "Passwords do not match. Please try again."
+            return handle_bad_request(error)
+            # return "Passwords do not match. Please try again.", 400
 
         # Check if password is strong
         if not is_password_strong(password):
             app.logger.warning(
                 f"Weak password attempt during registration for user: {username}"
             )
-            return (
-                "Password must be at least 8 characters long, contain uppercase, lowercase, a digit, and a special character.",
-                400,
-            )
+            error = "Password must be at least 8 characters long, contain uppercase, lowercase, a digit, and a special character."
+            return handle_bad_request(error)
+
+            # return (
+            # "Password must be at least 8 characters long, contain uppercase, lowercase, a digit, and a special character.",
+            #     400,
+            # )
 
         # Hash the password
         hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
@@ -227,7 +261,10 @@ def register():
         # Check if the username already exists
         if any(user["username"] == username for user in users):
             app.logger.warning(f"Username already exists: {username}")
-            return "Username already exists", 400
+            error = "Username already exists. Please choose a different username."
+            return handle_bad_request(error)
+            # return render_template("error_400.html", error=error)
+            # return "Username already exists", 400
 
         # Add new user to the users list
         users.append({"username": username, "password": hashed_password})
