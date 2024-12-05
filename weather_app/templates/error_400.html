@@ -88,7 +88,7 @@
         <!-- <a href="/" class="brand"><img src="http://via.placeholder.com/360x200?text=Your+Logo" width="180"
                 height="100"></a> -->
 
-        <h2>400</h2>
+        <h2>{{ error_code }}</h2>
         <h1>Bad request.</h1>
 
         <!-- <p>We’re sorry but something appears to be wrong with the request you made, please try again.</p> -->
@@ -99,7 +99,20 @@
         </div>
         {% endif %}
 
-        <span class="go-back"><a href="{{ url_for('register')}}">Go back</a></span>
+        <span class="go-back">
+            {% if error_code == 400 %}
+            <a href="{{ url_for('register') }}">Go back to registration</a>
+            <!-- {% elif error_code == 401 %}
+            <a href="{{ url_for('login') }}">Go back to home</a> -->
+            {% elif error_code == 404 %}
+            <a href="{{ url_for('dashboard') }}">Go back to home</a>
+            {% elif error_code == 500 %}
+            <a href="{{ url_for('support') }}">Contact support</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">Go back to login</a>
+            {% endif %}
+        </span>
+    </div>
     </div>
 
 </body>
