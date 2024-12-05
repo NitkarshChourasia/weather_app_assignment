@@ -668,5 +668,11 @@ def debug_session():
     return "Check the console for session data"
 
 
+@app.route("/support")
+def support():
+    # Your support page view
+    return render_template("support.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
