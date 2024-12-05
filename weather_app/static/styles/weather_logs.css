@@ -100,7 +100,8 @@ th {
   color: white;
 }
 button.btn-delete {
-  padding: 8px 16px;
+  /* padding: 8px 16px; */
+  padding: 0.55rem 1.5rem 0.7rem 1.5rem;
   background-color: #ff5733;
   color: white;
   border: none;
@@ -143,6 +144,36 @@ button.btn-delete:hover {
 
 .dashboard-link:visited {
   color: white;
+  text-decoration: none;
+}
+
+.about-us-button {
+  padding: 0.55rem 1.5rem 0.7rem 1.5rem;
+  border: black;
+  cursor: pointer;
+  display: inline;
+  margin: 1%;
+  background-color: #8320d3;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-weight: bolder;
+  color: white;
+  font-size: larger;
+  text-decoration: none;
+}
+.logout-button {
+  padding: 0.55rem 1.5rem 0.7rem 1.5rem;
+  border: black;
+  cursor: pointer;
+  display: inline;
+  /* margin: 1%; */
+  margin-left: 55%;
+  background-color: #8320d3;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-weight: bolder;
+  color: white;
+  font-size: larger;
   text-decoration: none;
 }
 
