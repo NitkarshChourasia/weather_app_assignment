@@ -139,6 +139,22 @@ def write_users_to_json(users):
 global user_name
 
 
+def handle_bad_request(
+    error="Please, Try Again", error_code=400, html_template_return="error_400.html"
+):
+    app.logger.warning(f"Bad request: {error}")
+
+    # Return the response with the provided or default values
+    return (
+        render_template(
+            html_template_return,
+            error=str(error),
+            error_code=int(error_code),
+        ),
+        int(error_code),
+    )
+
+
 # Login route
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -162,7 +178,11 @@ def login():
 
         # Log failed login attempt
         app.logger.warning(f"Failed login attempt for user: {username}")
-        return "Invalid credentials", 401  # Return an error message if login fails
+        error = "Invalid credentials! Enter correct username and password."
+        error_code = 401
+        return handle_bad_request(error=error, error_code=error_code)
+
+        # return "Invalid credentials", 401  # Return an error message if login fails
 
     return render_template("login.html")  # Render the login form on GET request
 
@@ -204,11 +224,6 @@ def is_username(username):
     return True
 
 
-def handle_bad_request(error):
-    app.logger.warning(f"Bad request: {error}")
-    return render_template("error_400.html", error=str(error)), 400
-
-
 # TODO: CHECK THE 400 PAGE FOR ERROR
 
 
@@ -226,8 +241,10 @@ def register():
         if not is_username(username):
             app.logger.warning(f"Invalid username: {username}")
             error = "Invalid username. Please use only alphanumeric characters and underscores."
+            # error_code = 400
+            return handle_bad_request(error=error)
 
-            return render_template("error_400.html", error=error)
+            # return render_template("error_400.html",error_code=error_code, error=error)
             # return (
             #     "Invalid username. Please use only alphanumeric characters and underscores.",
             #     400,
@@ -236,7 +253,7 @@ def register():
         if password != confirm_password:
             app.logger.warning(f"Passwords do not match for user: {username}")
             error = "Passwords do not match. Please try again."
-            return handle_bad_request(error)
+            return handle_bad_request(error=error)
             # return "Passwords do not match. Please try again.", 400
 
         # Check if password is strong
@@ -245,7 +262,7 @@ def register():
                 f"Weak password attempt during registration for user: {username}"
             )
             error = "Password must be at least 8 characters long, contain uppercase, lowercase, a digit, and a special character."
-            return handle_bad_request(error)
+            return handle_bad_request(error=error)
 
             # return (
             # "Password must be at least 8 characters long, contain uppercase, lowercase, a digit, and a special character.",
