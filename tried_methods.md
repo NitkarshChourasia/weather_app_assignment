@@ -7,9 +7,14 @@ A solution I found is localTunnel, which is a free service that exposes your loc
 
 # For future implementation
 
+<<<<<<< HEAD
 Will be using Rate-limit for API calling
 Thank you
 Deboucing based AJAX Call
+=======
+Deboucing based AJAX Call
+
+>>>>>>> 5ad6e592bf1f05199dbd6c98919ae27900fc153e
 Rate limit and Debouncing?
 What is the difference between these twos?
 Please let me know, thank you
