@@ -17,6 +17,8 @@ from secret_key_generator import generate_secret_key
 from models import db, WeatherData
 from flask_migrate import Migrate
 from flask_cors import CORS
+import geoip2.database
+import smtplib
 
 
 # Load environment variables from .env
@@ -124,6 +126,15 @@ bcrypt = Bcrypt(app)
 #     return render_template("dashboard.html", weather_icons=weather_icons)
 
 
+asn_reader = geoip2.database.Reader("static/geo_ip/GeoLite2-ASN_20241212")
+city_reader = geoip2.database.Reader("static/geo_ip/GeoLite2-City_20241212")
+
+
+@app.route("/get_location", methods=["GET"])
+def get_geo_location(ip):
+    client_ip = request.remote_addr or "8.8.8.8" # Replace '8.8.8.8' with test IP if needed
+
+
 # Function to read users from the JSON file
 def read_users_from_json():
     with open("data/users.json") as f:
@@ -185,6 +196,14 @@ def login():
         # return "Invalid credentials", 401  # Return an error message if login fails
 
     return render_template("login.html")  # Render the login form on GET request
+
+
+def send_alert_email(email, ip, location):
+    with smtplib.SMTP("smtp.example.com") as smtp:
+        smtp.login("your_email", "your_password")
+        message = f"Subject: Unusual Login Attempt\n\n"
+        message += f"Login attempt detected from IP: {ip}, Location: {location}."
+        smtp.sendmail("admin@example.com", email, message)
 
 
 # !to build a strong password check isn't there a library?
