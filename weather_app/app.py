@@ -126,13 +126,45 @@ bcrypt = Bcrypt(app)
 #     return render_template("dashboard.html", weather_icons=weather_icons)
 
 
-asn_reader = geoip2.database.Reader("static/geo_ip/GeoLite2-ASN_20241212")
-city_reader = geoip2.database.Reader("static/geo_ip/GeoLite2-City_20241212")
+asn_reader = geoip2.database.Reader(
+    "static/geo_ip/GeoLite2-ASN_20241212/GeoLite2-ASN.mmdb"
+)
+city_reader = geoip2.database.Reader(
+    "static/geo_ip/GeoLite2-City_20241210/GeoLite2-City.mmdb"
+)
 
 
 @app.route("/get_location", methods=["GET"])
-def get_geo_location(ip):
-    client_ip = request.remote_addr or "8.8.8.8" # Replace '8.8.8.8' with test IP if needed
+def get_geo_location():
+    # client_ip = (
+    #     request.remote_addr or "8.8.8.8"
+    # )  # Replace '8.8.8.8' with test IP if needed
+
+    # client_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    # client_ip = "52.167.144.145"
+    client_ip = "2409:40c0:11bb:6cc7:dd48:bc2f:f4e3:4207"
+
+    try:
+        city_data = city_reader.city(client_ip)
+        city_info = {
+            "city": city_data.city.name,
+            "region": city_data.subdivisions.most_specific.name,
+            "country:": city_data.country.name,
+            "latitute": city_data.location.latitude,
+            "longitude": city_data.location.longitude,
+        }
+
+        # Fetch ASN data
+        asn_data = asn_reader.asn(client_ip)
+        asn_info = {
+            "asn": asn_data.autonomous_system_number,
+            "isp": asn_data.autonomous_system_organization,
+        }
+        result = {"ip": client_ip, "city_info": city_info, "asn_info": asn_info}
+        return jsonify(result)
+    except Exception as e:
+        app.logger.error(f"Error fetching location data: {str(e)}")
+        return jsonify({"error": "An error occurred while fetching location data"}), 500
 
 
 # Function to read users from the JSON file
